@@ -53,7 +53,7 @@ class CompanyTest extends TestCase
         $this->headers['Authorization'] = 'Bearer ' . $token;
 
         $response=$this->get('/api/companies', $this->headers);
-        $response->assertNotFound();
+        $response->assertForbidden();
     }
     
     /** @test */

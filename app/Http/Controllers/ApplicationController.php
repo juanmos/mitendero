@@ -11,4 +11,9 @@ class ApplicationController extends Controller
     {
         return view('application');
     }
+
+    public function web()
+    {
+        return view('web');
+    }
 }

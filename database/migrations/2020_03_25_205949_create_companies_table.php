@@ -19,9 +19,6 @@ class CreateCompaniesTable extends Migration
             $table->string('company_name');
             $table->string('company_alias')->nullable();
             $table->string('ruc')->nullable();
-            $table->string('address')->nullable();
-            $table->string('phone')->nullable();
-            $table->point('lcoation')->nullable();
             $table->enum('status', ['active','suggested','inactive']);
             $table->timestamps();
             $table->softDeletes();

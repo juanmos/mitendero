@@ -2,40 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\CompanySuggestion;
 use Illuminate\Http\Request;
+use App\Models\CompanySuggestion;
 
 class CompanySuggestionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'company_name'=>'required',
+            'contact'=>'required',
+            'company_type_id'=>'required'
+        ]);
+
+        $data = $request->all();
+        $company=CompanySuggestion::create($data);
+        return response()->json(compact('company'));
     }
 
     /**

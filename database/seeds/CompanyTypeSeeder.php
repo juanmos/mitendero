@@ -19,6 +19,9 @@ class CompanyTypeSeeder extends Seeder
             'type'=>'Fruteria'
         ]);
         CompanyType::create([
+            'type'=>'Farmacias'
+        ]);
+        CompanyType::create([
             'type'=>'Distribuidor de gas'
         ]);
         CompanyType::create([

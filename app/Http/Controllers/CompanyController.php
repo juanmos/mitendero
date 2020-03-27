@@ -15,11 +15,11 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        if (in_array('Empresa', auth('api')->user()->getRoleNames()->toArray())) {
-            return response()->json([ 'error'=> 403, 'message'=> 'Forbidden' ], 403);
+        if (in_array('SuperAdministrador', auth('api')->user()->getRoleNames()->toArray())) {
+            $companies = Company::orderBy('company_name')->paginate('50');
+            return response()->json(compact('companies'));
         }
-        $companies = Company::orderBy('company_name')->paginate('50');
-        return response()->json(compact('companies'));
+        return response()->json([ 'error'=> 403, 'message'=> 'Forbidden' ], 403);
     }
 
     /**

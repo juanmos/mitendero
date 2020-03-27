@@ -16,7 +16,11 @@ class UserSeeder extends Seeder
             'guard_name'=>'web'
         ]);
         DB::table('roles')->insert([
-            'name'=>'Empresa',
+            'name'=>'Comercio',
+            'guard_name'=>'web'
+        ]);
+        DB::table('roles')->insert([
+            'name'=>'Usuario',
             'guard_name'=>'web'
         ]);
         DB::table('users')->insert([

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CompanyContact;
+use App\Models\CompanyLocation;
 use App\Models\CompanyType;
 use App\Models\Configuration;
 use App\Models\User;
@@ -14,13 +14,10 @@ class Company extends Model
         'company_name',
         'company_alias',
         'ruc',
-        'address',
-        'phone',
-        'location',
         'company_type_id',
         'status'
     ];
-    protected $with=['configuration','companyType'];
+    protected $with=['configuration','companyType','locations'];
 
     
     public function companyType()
@@ -33,9 +30,9 @@ class Company extends Model
         return $this->hasMany(User::class, 'company_id');
     }
 
-    public function contacts()
+    public function locations()
     {
-        return $this->hasMany(CompanyContact::class, 'company_id');
+        return $this->hasMany(CompanyLocation::class, 'company_id');
     }
     
     public function configuration()

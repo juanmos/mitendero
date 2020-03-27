@@ -10,8 +10,6 @@ $factory->define(Company::class, function (Faker $faker) {
         'company_name'=>$faker->company,
         'company_alias'=>$faker->company,
         'ruc'=>$faker->shuffle('1234567890'),
-        'address'=>$faker->address,
-        'phone'=>$faker->phoneNumber,
         'company_type_id'=>1,
         'status'=>'active'
     ];

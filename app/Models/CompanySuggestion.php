@@ -13,10 +13,10 @@ class CompanySuggestion extends Model
         'address',
         'email',
         'phone',
-        'location',
+        'lat',
+        'lng',
         'company_type_id',
-        'status',
-        'company_type_id'
+        'status'
     ];
 
     protected $with=['companyType'];
