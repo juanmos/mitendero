@@ -83,7 +83,9 @@
         "vuepress": "0.14.11",
         "vuesax": "3.11.1",
         "vuex": "^3.1.1",
-        "xlsx": "^0.15.0"
+        "xlsx": "^0.15.0",
+        "vue-browser-geolocation": "^1.8.0",
+        "vue-sweetalert2": "^3.0.3"
     },
     "dependencies": {
         "es6-promise": "^4.2.8"
