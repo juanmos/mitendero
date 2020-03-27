@@ -68,9 +68,12 @@
                     v-model="password_confirmation"
                     class="w-full mt-6"
                   />
-
+                  <br />
                   <vs-button type="border" :to="{ name: 'auth.login' }">{{$t('gotoLogin')}}</vs-button>
                   <vs-button class="float-right" @click="register">{{$t('register')}}</vs-button>
+                  <br />
+                  <br />
+                  <vs-button type="border" :to="{name: 'auth.nueva'}">{{$t('registerCompany')}}</vs-button>
                 </div>
               </div>
             </div>

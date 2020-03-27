@@ -90,7 +90,25 @@ Vue.use(VeeValidate);
 
 Vue.config.productionTip = false;
 
+//Vue sweet alert
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
+// Google Maps
+import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.use(VueGoogleMaps, {
+    load: {
+        // Add your API key here
+        key: process.env.MIX_GOOGLE_API_KEY,
+        libraries: 'places', // This is required if you use the Auto complete plug-in
+    },
+})
+
+//browser location 
+import VueGeolocation from 'vue-browser-geolocation';
+Vue.use(VueGeolocation);
+
+Vue.use(VueSweetalert2);
 
 new Vue({
     router,

@@ -17,7 +17,7 @@
             { 'no-scroll': isAppPage }
         ]"
   >
-    <v-nav-menu :navMenuItems="navMenuItems" title="Lupp CRM" parent=".layout--main" />
+    <v-nav-menu :navMenuItems="navMenuItems" title="Mi Tendero" parent=".layout--main" />
 
     <div id="content-area" :class="[contentAreaClass, { 'show-overlay': bodyOverlay }]">
       <div id="content-overlay" />

@@ -35,7 +35,16 @@ const router = new Router({
             meta: {
                 redirectIfAuthenticated: true
             },
-            children: [
+            children: [{
+                    path: '/',
+                    name: 'web.init',
+                    meta: {
+                        rule: 'public'
+                    },
+                    beforeEnter() {
+                        location.href = process.env.MIX_APP_URL
+                    }
+                },
                 // =============================================================================
                 // PAGES
                 // =============================================================================
@@ -58,10 +67,11 @@ const router = new Router({
                         import ('./views/auth/Register.vue')
                 },
                 {
-                    path: '/sugerencia',
-                    name: 'auth.sugerencia',
+                    path: '/tienda/nueva',
+                    name: 'auth.nueva',
                     meta: {
-                        rule: 'public'
+                        rule: 'public',
+                        pageTitle: 'Nuevo comercio'
                     },
                     component: () =>
                         import ('./views/auth/NewCompany.vue')
@@ -276,7 +286,7 @@ router.beforeEach((to, from, next) => {
     //  Redirect if not authenticated on secured routes
     if (to.matched.some(m => m.meta.requiresAuth)) {
         if (!store.getters['auth/isAuthenticated']) {
-            return next('/login')
+            return next('/')
         }
     }
 
