@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Hash;
 
 class LoginController extends Controller
 {
@@ -21,20 +25,35 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('auth:api', ['except' => ['login','create']]);
+    }
+
+    public function login()
+    {
+        $credentials = request(['email', 'password']);
+
+        if (! $token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
+    }
+
+    public function me()
+    {
+        $user=auth('api')->user();
+        $role=$user->getRoleNames()->implode('');
+        return response()->json(compact('user', 'role'));
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
     }
 }
