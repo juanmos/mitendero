@@ -11,7 +11,8 @@ class CompanyLocation extends Model
         'company_id',
         'address',
         'phone',
-        'location'
+        'lat',
+        'lng'
     ];
 
     public function company()

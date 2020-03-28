@@ -4,8 +4,11 @@
       <p class="font-semibold">{{ displayName }}</p>
       <small>{{activeUserInfo.role}}</small>
     </div>
-
-    <vs-dropdown-menu class="vx-navbar-dropdown">
+    <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+      <div class="con-img ml-3">
+        <img v-if="activeUserInfo.photo" key="onlineImg" :src="activeUserInfo.photo" alt="user-img" width="40" height="40" class="rounded-full shadow-md cursor-pointer block" />
+      </div>
+      <vs-dropdown-menu class="vx-navbar-dropdown">
         <ul style="min-width: 9rem">
 
           <li
@@ -53,6 +56,7 @@
           </li>
         </ul>
       </vs-dropdown-menu>
+    </vs-dropdown>
   </div>
 </template>
 

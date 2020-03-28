@@ -185,6 +185,11 @@ export default {
         userVerifiedDescription: 'Tu email ha sido verificado, ahora puedes comenzar a utilizar nuestro servicio.',
         verifying: 'Verificando',
         verifySend: 'Email de verificación enviado con éxito!',
-        fillCompanyData: 'Llena por favor la siguiente información para poder comenzar a vender tus productos en linea'
+        fillCompanyData: 'Llena por favor la siguiente información para poder comenzar a vender tus productos en linea',
+        next: 'Siguiente',
+        back: 'Atras',
+        locationCompany: 'Ubicación en el mapa',
+        Products: 'Productos',
+        CompanyProfile: 'Perfil de compañia'
     },
 }

@@ -137,13 +137,13 @@ const router = new Router({
                         import ('./views/Home.vue')
                 },
                 {
-                    path: 'invoices',
-                    name: 'company.invoices',
+                    path: 'products',
+                    name: 'company.products',
                     meta: {
                         rule: 'Empresa'
                     },
                     component: () =>
-                        import ('./views/invoices/Invoices.vue')
+                        import ('./views/products/Products.vue')
                 },
                 {
                     path: 'payments',
@@ -285,7 +285,7 @@ const router = new Router({
                 // =============================================================================
                 {
                     path: 'company',
-                    name: 'wizard.user',
+                    name: 'wizard.company',
                     meta: {
                         rule: 'Comercio'
                     },

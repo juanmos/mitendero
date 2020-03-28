@@ -4,6 +4,9 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
+use App\Events\CompanyVerificationPendingEvent;
+use App\Events\NewCompanyEvent;
 use Tests\TestCase;
 use App\Models\Company;
 use App\Models\User;
@@ -18,8 +21,7 @@ class CompanyTest extends TestCase
     public function setUp():void
     {
         parent::setUp();
-        $this->seed(UserSeeder::class);
-        $this->seed(CompanyTypeSeeder::class);
+        $this->seed();
 
         factory(User::class)->create([
             'email'    => 'test@email.com',
@@ -29,6 +31,7 @@ class CompanyTest extends TestCase
         $token = auth()->guard('api')
             ->login(User::first());
         $this->headers['Authorization'] = 'Bearer ' . $token;
+        Event::fake();
     }
 
     /** @test */
@@ -63,6 +66,7 @@ class CompanyTest extends TestCase
         $response=$this->post('/api/company', $this->companyData(), $this->headers);
         $response->assertOk();
         $response->assertJsonStructure(['company']);
+        Event::assertNotDispatched(NewCompanyEvent::class);
 
         $user=User::find(2);
         $user->company_id=1;
@@ -74,6 +78,7 @@ class CompanyTest extends TestCase
         $response=$this->post('/api/company', $this->companyData(), $this->headers);
         
         $response->assertForbidden();
+        Event::assertNotDispatched(NewCompanyEvent::class);
     }
 
     public function testCreateNewUserCompany()
@@ -93,6 +98,7 @@ class CompanyTest extends TestCase
         $response->assertOk();
         $response->assertJsonStructure(['company']);
         $this->assertNotEquals(0, $user->fresh()->company_id);
+        Event::assertDispatched(NewCompanyEvent::class);
     }
 
     /** @test */
@@ -113,7 +119,7 @@ class CompanyTest extends TestCase
             'password' => bcrypt('123456'),
             'company_id'=>factory(Company::class)
         ]);
-        $user->assignRole('Empresa');
+        $user->assignRole('Comercio');
 
         $token = auth()->guard('api')
             ->login($user);
@@ -132,13 +138,13 @@ class CompanyTest extends TestCase
             'password' => bcrypt('123456'),
             'company_id'=>factory(Company::class)
         ]);
-        $user->assignRole('Empresa');
+        $user->assignRole('Comercio');
 
         $token = auth()->guard('api')
             ->login($user);
         $this->headers['Authorization'] = 'Bearer ' . $token;
         $response=$this->put('api/company/1', $this->companyData(), $this->headers);
-        $response->assertUnauthorized();
+        $response->assertForbidden();
     }
     
 
@@ -168,6 +174,27 @@ class CompanyTest extends TestCase
         $response->assertJsonCount(10, 'users');
     }
     
+    /** @test */
+    public function testChangeCompanyStatus()
+    {
+        $this->withoutExceptionHandling();
+        $user=factory(User::class)->create([
+            'email'    => 'testing@email.com',
+            'password' => bcrypt('123456'),
+            'company_id'=>factory(Company::class)
+        ]);
+        $user->assignRole('Comercio');
+
+        $token = auth()->guard('api')
+            ->login($user);
+        $this->headers['Authorization'] = 'Bearer ' . $token;
+        $response=$this->put("api/company/{$user->company->id}/status/2", [], $this->headers);
+        $response->assertOk();
+        $response->assertJsonStructure(['company']);
+
+        $this->assertEquals(2, $user->fresh()->company->status_id);
+        Event::assertDispatched(CompanyVerificationPendingEvent::class);
+    }
 
 
     private function companyData()

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\CompanyLocation;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class CompanyLocationController extends Controller
@@ -33,9 +33,17 @@ class CompanyLocationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Company $company)
     {
-        //
+        $request->validate([
+            'lat'=>'required|numeric',
+            'lng'=>'required|numeric',
+            'address'=>'required',
+            'phone'=>'required',
+        ]);
+        $company->locations()->create($request->all());
+        $company->fresh();
+        return response()->json(['created'=>true,'company'=>$company]);
     }
 
     /**
