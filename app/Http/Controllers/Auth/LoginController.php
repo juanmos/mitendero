@@ -45,6 +45,9 @@ class LoginController extends Controller
     {
         $user=auth('api')->user();
         $role=$user->getRoleNames()->implode('');
+
+        $user->verified=($user->email_verified_at == null)?false:true;
+        
         return response()->json(compact('user', 'role'));
     }
 
