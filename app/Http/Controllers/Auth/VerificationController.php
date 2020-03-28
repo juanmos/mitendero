@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
 class VerificationController extends Controller
 {
+    use VerifiesEmails;
     /*
     |--------------------------------------------------------------------------
     | Email Verification Controller
@@ -18,8 +22,36 @@ class VerificationController extends Controller
     | be re-sent if the user didn't receive the original email message.
     |
     */
+    public function verify(Request $request)
+    {
+        if (! hash_equals((string) $request->route('id'), (string) $request->user()->getKey())) {
+            throw new AuthorizationException;
+        }
 
-    use VerifiesEmails;
+        if (! hash_equals((string) $request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
+            throw new AuthorizationException;
+        }
+        if ($request->user()->hasVerifiedEmail()) {
+            return $request->wantsJson()
+                        ? response()->json(['status'=>2])
+                        : redirect($this->redirectPath());
+        }
+
+        if ($request->user()->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+
+        if ($response = $this->verified($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+                    ? response()->json(['status'=>1])
+                    : redirect($this->redirectPath())->with('verified', true);
+    }
+
+    
+    
 
     /**
      * Where to redirect users after verification.
@@ -35,7 +67,7 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:api');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }

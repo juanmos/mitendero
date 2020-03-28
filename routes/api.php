@@ -4,8 +4,10 @@ Route::post('company/suggestion', 'CompanySuggestionController@store');
 
 Route::group(['prefix' => 'auth','middleware'=>'api', 'namespace'=>'Auth'], function () {
     Route::post('login', ['as'=>'login','uses'=>'LoginController@login']);
-    Route::post('signup', ['as'=>'signup','uses'=>'LoginController@create']);
+    Route::post('signup/{type}', ['as'=>'signup','uses'=>'RegisterController@register']);
     Route::get('me', ['as'=>'me','uses'=>'LoginController@me']);
+    Route::get('verify/user/{id}/{hash}', ['as'=>'verification.verify', 'uses' => 'VerificationController@verify' ]);
+    Route::get('verify/resend', 'VerificationController@resend');
 });
 
 Route::group(['prefix' => 'profile','middleware'=>'api'], function () {
@@ -21,11 +23,11 @@ Route::group(['middleware' => 'api'], function () {
     Route::put('/company/{company}', 'CompanyController@update')->name('company.update');
     Route::get('company/{company}/users', 'CompanyController@users')->name('company.users');
 
-    //CONTACTS
-    Route::get('company/{company}/contacts', 'CompanyContactController@index')->name('contacts.index');
-    Route::post('company/contact', 'CompanyContactController@store')->name('contacts.store');
-    Route::put('company/contact/{contact}', 'CompanyContactController@update')->name('contacts.update');
-    Route::delete('company/contact/{contact}', 'CompanyContactController@destroy')->name('contacts.destroy');
+    // //CONTACTS
+    // Route::get('company/{company}/contacts', 'CompanyContactController@index')->name('contacts.index');
+    // Route::post('company/contact', 'CompanyContactController@store')->name('contacts.store');
+    // Route::put('company/contact/{contact}', 'CompanyContactController@update')->name('contacts.update');
+    // Route::delete('company/contact/{contact}', 'CompanyContactController@destroy')->name('contacts.destroy');
 
 
 

@@ -10,9 +10,10 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\ResetPasswordNotification;
+use App\Notifications\VerifyEmail;
 use App\Models\Company;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use Notifiable;
     use SoftDeletes;
@@ -70,12 +71,10 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string  $token
-     * @return void
-     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail());
+    }
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
