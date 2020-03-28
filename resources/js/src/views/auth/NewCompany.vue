@@ -26,6 +26,7 @@
                         v-model="company_type_id"
                         class="w-full select-large"
                         :label="$t('companyType')"
+                        v-validate="'required'"
                       >
                         <vs-select-item
                           :key="index"
@@ -35,6 +36,10 @@
                           class="w-full"
                         />
                       </vs-select>
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('company_type_id')"
+                      >{{ errors.first('company_type_id') }}</span>
                     </div>
                     <div class="vx-col sm:w-1/2 w-full mb-2">
                       <vs-input
@@ -46,7 +51,12 @@
                         :placeholder="$t('company')"
                         v-model="company"
                         class="w-full"
+                        v-validate="'required'"
                       />
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('company')"
+                      >{{ errors.first('company') }}</span>
                     </div>
                   </div>
                   <h6>Datos de la cuenta</h6>
@@ -60,7 +70,12 @@
                         :label-placeholder="$t('firstName')"
                         v-model="first_name"
                         class="w-full"
+                        v-validate="'required'"
                       />
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('first_name')"
+                      >{{ errors.first('first_name') }}</span>
                     </div>
                     <div class="vx-col sm:w-1/2 w-full mb-2">
                       <vs-input
@@ -71,7 +86,12 @@
                         :label-placeholder="$t('lastName')"
                         v-model="last_name"
                         class="w-full"
+                        v-validate="'required'"
                       />
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('last_name')"
+                      >{{ errors.first('last_name') }}</span>
                     </div>
                   </div>
 
@@ -83,7 +103,12 @@
                     :label-placeholder="$t('email')"
                     v-model="email"
                     class="w-full"
+                    v-validate="'required|email'"
                   />
+                  <span
+                    class="text-danger text-sm"
+                    v-show="errors.has('email')"
+                  >{{ errors.first('email') }}</span>
                   <div class="vx-row">
                     <div class="vx-col sm:w-1/2 w-full mb-2">
                       <vs-input
@@ -95,7 +120,12 @@
                         :label-placeholder="$t('password')"
                         v-model="password"
                         class="w-full mt-6"
+                        v-validate="'required|min:6'"
                       />
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('password')"
+                      >{{ errors.first('password') }}</span>
                     </div>
                     <div class="vx-col sm:w-1/2 w-full mb-2">
                       <vs-input
@@ -107,12 +137,21 @@
                         :label-placeholder="$t('passwordConfirmation')"
                         v-model="password_confirmation"
                         class="w-full mt-6"
+                        v-validate="'required|min:6'"
                       />
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('password_confirmation')"
+                      >{{ errors.first('password_confirmation') }}</span>
                     </div>
                   </div>
                   <br />
                   <vs-button type="border" :to="{ name: 'auth.login' }">{{$t('gotoLogin')}}</vs-button>
-                  <vs-button class="float-right" @click="register">{{$t('createCompany')}}</vs-button>
+                  <vs-button
+                    class="float-right"
+                    @click="register"
+                    :disabled="!isFormValid"
+                  >{{$t('createCompany')}}</vs-button>
                 </div>
               </div>
             </div>
@@ -139,20 +178,30 @@ export default {
     };
   },
   methods: {
-    ...mapActions("auth", ["signupCompnay"]),
+    ...mapActions("auth", ["signup"]),
+    ...mapActions("company", ["saveCompanyData"]),
     register() {
-      this.signup({
-        first_name: this.first_name,
-        last_name: this.last_name,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.password_confirmation,
-        tipo: "comercio"
-      })
-        .then(res => {
-          this.$router.push({ name: "auth.verify" });
-        })
-        .catch(err => {});
+      this.$validator.validateAll().then(result => {
+        if (result) {
+          this.signup({
+            first_name: this.first_name,
+            last_name: this.last_name,
+            email: this.email,
+            password: this.password,
+            password_confirmation: this.password_confirmation,
+            tipo: "comercio"
+          })
+            .then(res => {
+              this.saveCompanyData({
+                company_name: this.company,
+                company_type_id: this.company_type_id
+              }).then(result => {
+                this.$router.push({ name: "auth.verify" });
+              });
+            })
+            .catch(err => {});
+        }
+      });
     }
   },
   created() {
@@ -162,6 +211,19 @@ export default {
         this.companyTypes = response.data.companyTypes;
       })
       .catch(error => {});
+  },
+  computed: {
+    isFormValid() {
+      return (
+        !this.errors.any() &&
+        this.first_name &&
+        this.last_name &&
+        this.email &&
+        this.password &&
+        this.password_confirmation &&
+        this.company
+      );
+    }
   }
 };
 </script>

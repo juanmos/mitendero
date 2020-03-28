@@ -287,10 +287,10 @@ const router = new Router({
                     path: 'company',
                     name: 'wizard.user',
                     meta: {
-                        rule: 'Empresa'
+                        rule: 'Comercio'
                     },
                     component: () =>
-                        import ('./views/wizard/User.vue')
+                        import ('./views/wizard/Company.vue')
                 }
             ]
         },

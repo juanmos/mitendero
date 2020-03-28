@@ -11,6 +11,6 @@ $factory->define(Company::class, function (Faker $faker) {
         'company_alias'=>$faker->company,
         'ruc'=>$faker->shuffle('1234567890'),
         'company_type_id'=>1,
-        'status'=>'active'
+        'status_id'=>1
     ];
 });

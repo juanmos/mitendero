@@ -59,17 +59,21 @@ class CompanyTest extends TestCase
     /** @test */
     public function testCreateCompany()
     {
+        $this->withoutExceptionHandling();
         $response=$this->post('/api/company', $this->companyData(), $this->headers);
         $response->assertOk();
         $response->assertJsonStructure(['company']);
 
+        $user=User::find(2);
+        $user->company_id=1;
+        $user->save();
         $token = auth()->guard('api')
-            ->login(User::find(2));
+            ->login($user);
         $this->headers['Authorization'] = 'Bearer ' . $token;
 
         $response=$this->post('/api/company', $this->companyData(), $this->headers);
         
-        $response->assertUnauthorized();
+        $response->assertForbidden();
     }
 
     public function testCreateNewUserCompany()
@@ -80,7 +84,7 @@ class CompanyTest extends TestCase
             'password' => bcrypt('123456'),
             'company_id'=>0
         ]);
-        $user->assignRole('Empresa');
+        $user->assignRole('Comercio');
 
         $token = auth()->guard('api')
             ->login($user);

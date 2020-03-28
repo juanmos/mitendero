@@ -104,7 +104,7 @@ class RegisterController extends Controller
             return response()->json($arrResponse);
         }
         event(new Registered($user = $this->create($request->all())));
-        $user->assignRole(($type=='comercion')?'Comercio':'Usuario');
+        $user->assignRole(($type=='comercio')?'Comercio':'Usuario');
 
         $credentials = request(['email', 'password']);
 

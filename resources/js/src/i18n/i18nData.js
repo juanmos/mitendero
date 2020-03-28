@@ -184,6 +184,7 @@ export default {
         userVerifiedTitle: 'Usuario verificado con éxito',
         userVerifiedDescription: 'Tu email ha sido verificado, ahora puedes comenzar a utilizar nuestro servicio.',
         verifying: 'Verificando',
-        verifySend: 'Email de verificación enviado con éxito!'
+        verifySend: 'Email de verificación enviado con éxito!',
+        fillCompanyData: 'Llena por favor la siguiente información para poder comenzar a vender tus productos en linea'
     },
 }

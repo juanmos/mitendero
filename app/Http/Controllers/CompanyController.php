@@ -41,13 +41,11 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'company_name'=>'required',
-            'company_alias'=>'required',
-            'ruc'=>'required|digits_between:10,13',
+            'company_name'=>'required'
         ]);
         $data = $request->all();
 
-        if (in_array('Empresa', auth('api')->user()->getRoleNames()->toArray()) && auth('api')->user()->company_id!=0) {
+        if (in_array('Comercio', auth('api')->user()->getRoleNames()->toArray()) && auth('api')->user()->company_id!=0) {
             return response()->json([ 'error'=> 403, 'message'=> 'Forbidden' ], 403);
         } else {
             $company =Company::create($data);

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\URL;
+use App\Notifications\VerifyEmail;
 use Tests\TestCase;
 use App\Models\User;
 use UserSeeder;
@@ -113,7 +113,7 @@ class AuthTest extends TestCase
         $this->headers['Accept']="application/json";
         
         $url =URL::temporarySignedRoute(
-            'verify',
+            'verification.verify',
             now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
                 'id' => $user->getKey(),
@@ -139,7 +139,7 @@ class AuthTest extends TestCase
         $this->headers['Accept']="application/json";
         
         $url =URL::temporarySignedRoute(
-            'verify',
+            'verification.verify',
             now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
                 'id' => $user->getKey(),

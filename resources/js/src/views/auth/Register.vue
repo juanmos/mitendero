@@ -28,7 +28,12 @@
                     :label-placeholder="$t('firstName')"
                     v-model="first_name"
                     class="w-full"
+                    v-validate="'required'"
                   />
+                  <span
+                    class="text-danger text-sm"
+                    v-show="errors.has('first_name')"
+                  >{{ errors.first('first_name') }}</span>
                   <vs-input
                     name="last_name"
                     icon-no-border
@@ -37,8 +42,14 @@
                     :label-placeholder="$t('lastName')"
                     v-model="last_name"
                     class="w-full"
+                    v-validate="'required'"
                   />
+                  <span
+                    class="text-danger text-sm"
+                    v-show="errors.has('last_name')"
+                  >{{ errors.first('last_name') }}</span>
                   <vs-input
+                    type="email"
                     name="email"
                     icon-no-border
                     icon="icon icon-user"
@@ -46,8 +57,12 @@
                     :label-placeholder="$t('email')"
                     v-model="email"
                     class="w-full"
+                    v-validate="'required|email'"
                   />
-
+                  <span
+                    class="text-danger text-sm"
+                    v-show="errors.has('email')"
+                  >{{ errors.first('email') }}</span>
                   <vs-input
                     type="password"
                     name="password"
@@ -57,7 +72,12 @@
                     :label-placeholder="$t('password')"
                     v-model="password"
                     class="w-full mt-6"
+                    v-validate="'required|min:6'"
                   />
+                  <span
+                    class="text-danger text-sm"
+                    v-show="errors.has('password')"
+                  >{{ errors.first('password') }}</span>
                   <vs-input
                     type="password"
                     name="password_confirmation"
@@ -67,10 +87,19 @@
                     :label-placeholder="$t('passwordConfirmation')"
                     v-model="password_confirmation"
                     class="w-full mt-6"
+                    v-validate="'required|min:6'"
                   />
+                  <span
+                    class="text-danger text-sm"
+                    v-show="errors.has('password_confirmation')"
+                  >{{ errors.first('password_confirmation') }}</span>
                   <br />
                   <vs-button type="border" :to="{ name: 'auth.login' }">{{$t('gotoLogin')}}</vs-button>
-                  <vs-button class="float-right" @click="register">{{$t('register')}}</vs-button>
+                  <vs-button
+                    class="float-right"
+                    @click="register"
+                    :disabled="!isFormValid"
+                  >{{$t('register')}}</vs-button>
                   <br />
                   <br />
                   <vs-button type="border" :to="{name: 'auth.nueva'}">{{$t('registerCompany')}}</vs-button>
@@ -99,17 +128,33 @@ export default {
   methods: {
     ...mapActions("auth", ["signup"]),
     register() {
-      this.signup({
-        first_name: this.first_name,
-        last_name: this.last_name,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.password_confirmation
-      })
-        .then(res => {
-          this.$router.push({ name: "auth.verify" });
-        })
-        .catch(err => {});
+      this.$validator.validateAll().then(result => {
+        if (result) {
+          this.signup({
+            first_name: this.first_name,
+            last_name: this.last_name,
+            email: this.email,
+            password: this.password,
+            password_confirmation: this.password_confirmation
+          })
+            .then(res => {
+              this.$router.push({ name: "auth.verify" });
+            })
+            .catch(err => {});
+        }
+      });
+    }
+  },
+  computed: {
+    isFormValid() {
+      return (
+        !this.errors.any() &&
+        this.first_name &&
+        this.last_name &&
+        this.email &&
+        this.password &&
+        this.password_confirmation
+      );
     }
   }
 };
