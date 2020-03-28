@@ -77,6 +77,26 @@ const router = new Router({
                         import ('./views/auth/NewCompany.vue')
                 },
                 {
+                    path: '/user/verify',
+                    name: 'auth.verify',
+                    meta: {
+                        rule: 'public',
+                        pageTitle: 'Verifica usuario'
+                    },
+                    component: () =>
+                        import ('./views/auth/VerifyEmail.vue')
+                },
+                {
+                    path: '/email/verify',
+                    name: 'email.verify',
+                    meta: {
+                        rule: 'public',
+                        pageTitle: 'Usuario verificado'
+                    },
+                    component: () =>
+                        import ('./views/auth/VerifyEmail.vue')
+                },
+                {
                     path: '/error',
                     name: 'page-error-404',
                     component: () =>
@@ -274,6 +294,28 @@ const router = new Router({
                 }
             ]
         },
+        {
+            path: '/home',
+            component: () =>
+                import ('@/layouts/main/Main.vue'),
+            meta: {
+                requiresAuth: true
+            },
+            children: [
+                // =============================================================================
+                // PAGES
+                // =============================================================================
+                {
+                    path: '',
+                    name: 'user.home',
+                    meta: {
+                        rule: 'Usuario'
+                    },
+                    component: () =>
+                        import ('./views/home/User.vue')
+                }
+            ]
+        },
         // Redirect to 404 page, if no match found
         {
             path: '*',
@@ -291,10 +333,12 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
+
         if (store.getters['auth/getRol'] == 'SuperAdministrador') {
             return next('/admin/companies');
         }
-        return next('/company/home')
+        return next()
+            // return next('/company/home')
     }
 
     return next()

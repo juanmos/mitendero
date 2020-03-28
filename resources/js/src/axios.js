@@ -2,13 +2,13 @@ import axios from 'axios'
 import Ls from './services/ls'
 
 const instance = axios.create({
-    baseURL: process.env.APP_URL
+    baseURL: 'http://tiendaweb.test/'
 })
 
 instance.interceptors.request.use(function(config) {
         const AUTH_TOKEN = Ls.get('auth.token')
         const companyId = Ls.get('selectedCompany')
-
+        config.headers.common['Accept'] = 'application/json';
         if (AUTH_TOKEN) {
             config.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`
         }

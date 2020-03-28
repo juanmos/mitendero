@@ -92,7 +92,8 @@ export default {
       last_name: "",
       email: "",
       password: "",
-      password_confirmation: ""
+      password_confirmation: "",
+      tipo: "usuario"
     };
   },
   methods: {
@@ -106,7 +107,7 @@ export default {
         password_confirmation: this.password_confirmation
       })
         .then(res => {
-          this.$router.push("/wizard/company");
+          this.$router.push({ name: "auth.verify" });
         })
         .catch(err => {});
     }

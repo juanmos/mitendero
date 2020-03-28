@@ -9,7 +9,7 @@ export default {
     }, data) {
         return new Promise((resolve, reject) => {
             axios
-                .post("api/auth/signup", data)
+                .post("api/auth/signup/" + data.tipo, data)
                 .then(({
                     data
                 }) => {
@@ -81,6 +81,12 @@ export default {
                         root: true
                     });
                 }
+                if (!data.user.verified) {
+                    router.push({
+                        name: 'auth.verify'
+                    });
+                }
+
                 resolve();
             })
         });
@@ -117,6 +123,13 @@ export default {
             commit('CLEAR_AUTH');
             router.replace('/login');
             resolve();
+        })
+    },
+    activateUser({
+        dispatch
+    }) {
+        dispatch('activateUser', null, {
+            root: true
         })
     }
 }

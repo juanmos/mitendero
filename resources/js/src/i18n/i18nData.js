@@ -177,6 +177,13 @@ export default {
         companySuggested: 'La sugerencia ha sido enviada!',
         success: 'Exito',
         registerCompany: 'Registrar mi tienda',
-        createCompany: 'Crear mi comercio'
+        createCompany: 'Crear mi comercio',
+        userVerifyTitle: 'Usuario creado con éxito',
+        userVerifyDescription: 'Hemos enviado un email a tu coreo para poder verificar tu cuenta de correo, por favor ingresa y sigue las intrucciones ahi indicadas. Si no lo encuestras revisa en SPAM.',
+        resendVerification: 'Enviar mail nuevamente',
+        userVerifiedTitle: 'Usuario verificado con éxito',
+        userVerifiedDescription: 'Tu email ha sido verificado, ahora puedes comenzar a utilizar nuestro servicio.',
+        verifying: 'Verificando',
+        verifySend: 'Email de verificación enviado con éxito!'
     },
 }

@@ -9,6 +9,5 @@ export default {
     },
     CHANGE_ROL(state, rol) {
         state.rol = rol;
-
     }
 }

@@ -38,13 +38,13 @@
                     </div>
                     <div class="vx-col sm:w-1/2 w-full mb-2">
                       <vs-input
-                        name="last_name"
+                        name="company"
                         icon-no-border
                         icon="icon icon-shopping-bag"
                         icon-pack="feather"
                         :label="$t('company')"
                         :placeholder="$t('company')"
-                        v-model="last_name"
+                        v-model="company"
                         class="w-full"
                       />
                     </div>
@@ -134,6 +134,7 @@ export default {
       email: "",
       password: "",
       password_confirmation: "",
+      company: "",
       companyTypes: null
     };
   },
@@ -145,10 +146,11 @@ export default {
         last_name: this.last_name,
         email: this.email,
         password: this.password,
-        password_confirmation: this.password_confirmation
+        password_confirmation: this.password_confirmation,
+        tipo: "comercio"
       })
         .then(res => {
-          this.$router.push("/wizard/company");
+          this.$router.push({ name: "auth.verify" });
         })
         .catch(err => {});
     }

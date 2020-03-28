@@ -88,6 +88,11 @@ const actions = {
         }).catch((err) => {
 
         })
+    },
+    activateUser({
+        commit
+    }) {
+        commit('ACTIVATE_USER');
     }
 }
 
