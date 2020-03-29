@@ -66,7 +66,6 @@ if (mix.inProduction()) {
     mix.version();
     mix.webpackConfig({
         output: {
-            publicPath: '/demo/vuexy-vuejs-laravel-admin-template/demo-1/',
             chunkFilename: 'js/chunks/[name].[chunkhash].js',
         }
     });

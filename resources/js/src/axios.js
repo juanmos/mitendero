@@ -2,7 +2,7 @@ import axios from 'axios'
 import Ls from './services/ls'
 
 const instance = axios.create({
-    baseURL: 'http://tiendaweb.test/'
+    baseURL: process.env.MIX_APP_URL
 })
 
 instance.interceptors.request.use(function(config) {
