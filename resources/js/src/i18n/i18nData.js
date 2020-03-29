@@ -190,6 +190,7 @@ export default {
         back: 'Atras',
         locationCompany: 'Ubicación en el mapa',
         Products: 'Productos',
-        CompanyProfile: 'Perfil de compañia'
+        CompanyProfile: 'Perfil de compañia',
+        Categories: 'Categorias'
     },
 }

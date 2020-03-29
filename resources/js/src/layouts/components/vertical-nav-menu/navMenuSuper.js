@@ -26,6 +26,12 @@ export default [{
         icon: 'UserIcon',
         slug: 'users',
         i18n: "Users",
+    }, {
+        name: 'Categorias',
+        url: '/admin/categories',
+        icon: 'CoffeeIcon',
+        slug: 'users',
+        i18n: "Categories",
     },
     {
         name: 'Ayuda',

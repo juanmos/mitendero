@@ -23,10 +23,10 @@ export default [{
         i18n: "Products",
     },
     {
-        url: "/company/profile",
+        url: "/profile",
         name: "Perfil",
         slug: "profile",
-        icon: "DollarSignIcon",
+        icon: "UsersIcon",
         i18n: "CompanyProfile",
     },
     // {

@@ -155,7 +155,7 @@
   </section>
   <!--================About Area End =================-->
 
-  <!--================Tour section Start =================-->
+  <!--================Products section Start =================-->
   <section class="section-margin pb-xl-5">
     <div class="container">
       <div class="row">
@@ -211,7 +211,7 @@
             <div class="col-md-3 col-sm-6 col-6">
               <div class="category-card">
                 <img class="card-img rounded-0" src="{{asset('images/web/categories/fish.svg')}}" alt="">
-                <h5>Pescados</h5>
+                <h5>Carnes y Pescados</h5>
               </div>
             </div>
             <div class="col-md-3 col-sm-6 col-6">

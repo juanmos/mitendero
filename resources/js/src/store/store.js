@@ -17,6 +17,7 @@ import mutations from "./mutations"
 import actions from "./actions"
 
 import auth from "./modules/auth";
+import category from "./modules/category";
 import company from "./modules/company";
 import companies from "./modules/companies";
 import configuration from "./modules/configuration";
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     actions,
     modules: {
         auth,
+        category,
         company,
         companies,
         configuration,

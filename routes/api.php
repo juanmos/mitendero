@@ -27,12 +27,6 @@ Route::group(['middleware' => 'api'], function () {
     //COMPANY LOCATIONS
     Route::post('/company/{company}/location', 'CompanyLocationController@store')->name('company.location.store');
 
-    // //CONTACTS
-    // Route::get('company/{company}/contacts', 'CompanyContactController@index')->name('contacts.index');
-    // Route::post('company/contact', 'CompanyContactController@store')->name('contacts.store');
-    // Route::put('company/contact/{contact}', 'CompanyContactController@update')->name('contacts.update');
-    // Route::delete('company/contact/{contact}', 'CompanyContactController@destroy')->name('contacts.destroy');
-
 
 
     //USERS
@@ -42,4 +36,7 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/users', 'UserController@store')->name('user.store');
     Route::put('/users/{user}', 'UserController@update')->name('user.update');
     Route::delete('/users/{user}', 'UserController@destroy')->name('user.destroy');
+
+    //CATEGORIES
+    Route::get('/categories', 'CategoryController@index')->name('category.index');
 });
