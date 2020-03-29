@@ -45,5 +45,31 @@ export default {
             dispatch('configuration/setConfigData', data.configuration.configurations, {
                 root: true
             });
+    },
+    saveCompanyLocation({
+        commit,
+        dispatch
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios.post(`api/company/${data.id}/location`, data).then(result => {
+                commit('setCompany', result.data.company);
+                if (result.data.company.configuration.configurations != null)
+                    dispatch('configuration/setConfigData', result.data.company.configuration.configurations);
+                resolve(result.data);
+            });
+        });
+    },
+    changeCompanyStatus({
+        commit,
+        state
+    }, status) {
+        return new Promise((resolve, reject) => {
+            axios.put(`api/company/${state.company.id}/status/${status}`, {}).then(result => {
+                commit('setCompany', result.data.company);
+                if (result.data.company.configuration.configurations != null)
+                    dispatch('configuration/setConfigData', result.data.company.configuration.configurations);
+                resolve(result.data);
+            })
+        })
     }
 }

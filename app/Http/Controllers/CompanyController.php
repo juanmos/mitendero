@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyStatus;
 use App\Models\CompanyType;
 use Illuminate\Http\Request;
+use App\Events\CompanyVerificationPendingEvent;
+use App\Events\NewCompanyEvent;
 
 class CompanyController extends Controller
 {
@@ -47,10 +50,11 @@ class CompanyController extends Controller
 
         if (in_array('Comercio', auth('api')->user()->getRoleNames()->toArray()) && auth('api')->user()->company_id!=0) {
             return response()->json([ 'error'=> 403, 'message'=> 'Forbidden' ], 403);
-        } else {
+        } elseif (in_array('Comercio', auth('api')->user()->getRoleNames()->toArray()) && auth('api')->user()->company_id==0) {
             $company =Company::create($data);
             $company->configuration()->create();
             auth('api')->user()->update(['company_id'=>$company->id]);
+            event(new NewCompanyEvent($company));
             return response()->json(compact('company'));
         }
 
@@ -91,7 +95,7 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        if (in_array('Empresa', auth('api')->user()->getRoleNames()->toArray()) && auth('api')->user()->company_id!=$company->id) {
+        if (in_array('Comercio', auth('api')->user()->getRoleNames()->toArray()) && auth('api')->user()->company_id!=$company->id) {
             return response()->json([ 'error'=> 403, 'message'=> 'Forbidden' ], 403);
         }
         $request->validate([
@@ -103,6 +107,18 @@ class CompanyController extends Controller
         $company->update($data);
         $updated=true;
         return response()->json(compact('updated', 'company'));
+    }
+
+    public function setStatus(Request $request, Company $company, CompanyStatus $status)
+    {
+        if ($company != null && $status != null) {
+            $company->status_id = $status->id;
+            $company->save();
+            event(new CompanyVerificationPendingEvent($company));
+            $company->fresh();
+            return response()->json(compact('company'));
+        }
+        abort(404);
     }
 
     /**

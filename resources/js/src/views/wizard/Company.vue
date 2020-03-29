@@ -5,9 +5,8 @@
   >
     <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
       <vx-card>
-        <h6>{{$t('fillCompanyData')}}</h6>
         <div id="extra-component-form-wizard-demo">
-          <registration-wizard></registration-wizard>
+          <registration-wizard title="Llena la información de tu comercio"></registration-wizard>
         </div>
       </vx-card>
     </div>
@@ -17,9 +16,17 @@
 
 <script>
 import RegistrationWizard from "./RegistrationWizard.vue";
+import { mapState, mapGetters } from "vuex";
 export default {
   components: {
     RegistrationWizard
+  },
+  methods: {
+    ...mapGetters("auth", ["getRol"])
+  },
+  beforeMount() {
+    this.$store.dispatch("auth/tryAutoLogin");
+    this.getRol();
   }
 };
 </script>

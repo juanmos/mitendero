@@ -76,16 +76,24 @@ export default {
                     root: true
                 })
                 commit('CHANGE_ROL', data.role);
-                if (data.user.company != null) {
-                    dispatch('company/setCompanyData', data.user.company, {
-                        root: true
-                    });
-                }
                 if (!data.user.verified) {
                     router.push({
                         name: 'auth.verify'
                     });
                 }
+                if (data.user.company != null) {
+                    dispatch('company/setCompanyData', data.user.company, {
+                        root: true
+                    });
+                    if (data.role == 'Comercio') {
+                        if (data.user.company.status_id == 1) {
+                            router.push({
+                                name: 'wizard.company'
+                            });
+                        }
+                    }
+                }
+
 
                 resolve();
             })

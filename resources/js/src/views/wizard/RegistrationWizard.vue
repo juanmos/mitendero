@@ -2,9 +2,11 @@
   <form-wizard
     color="rgba(var(--vs-primary), 1)"
     errorColor="rgba(var(--vs-danger), 1)"
-    :title="null"
+    :title="$t('fillCompanyData')"
     :subtitle="null"
-    finishButtonText="Submit"
+    :finishButtonText="$t('save')"
+    :nextButtonText="$t('next')"
+    :backButtonText="$t('back')"
     ref="formWizard"
   >
     <tab-content
@@ -125,26 +127,7 @@
             />
             <span class="text-danger">{{ errors.first('step-2.company_alias') }}</span>
           </div>
-          <div class="vx-col md:w-1/2 w-full">
-            <vs-input
-              :label="$t('companyPhone')"
-              v-model="company.phone"
-              class="w-full mt-4"
-              name="company_phone"
-              v-validate="'required|integer|min:6'"
-            />
-            <span class="text-danger">{{ errors.first('step-2.company_phone') }}</span>
-          </div>
-          <div class="vx-col md:w-1/2 w-full">
-            <vs-input
-              :label="$t('companyAddress')"
-              v-model="company.address"
-              class="w-full mt-4"
-              name="company_address"
-              v-validate="'required'"
-            />
-            <span class="text-danger">{{ errors.first('step-2.company_address') }}</span>
-          </div>
+
           <div class="vx-col md:w-1/2 w-full">
             <vs-input
               :label="$t('identification')"
@@ -161,50 +144,44 @@
 
     <!-- tab 3 content -->
     <tab-content
-      :title="$t('invoiceConfig')"
+      :title="$t('locationCompany')"
       class="mb-5"
       icon="feather icon-file"
       :before-change="validateStep3"
     >
       <form data-vv-scope="step-3">
         <div class="vx-row">
-          <h3 class="vx-col w-full">Fill the information to start making invoices</h3>
-          <div class="vx-col md:w-1/3 w-full">
+          <div class="vx-col md:w-1/2 w-full">
             <vs-input
-              :label="$t('establishment')"
-              v-model="config.establishment"
-              class="w-full mt-5"
-              name="establishment"
+              :label="$t('companyPhone')"
+              v-model="phone"
+              class="w-full mt-4"
+              name="company_phone"
+              v-validate="'required|integer|min:6'"
             />
-            <span class="text-danger"></span>
+            <span class="text-danger">{{ errors.first('step-3.company_phone') }}</span>
           </div>
-          <div class="vx-col md:w-1/3 w-full">
+          <div class="vx-col md:w-1/2 w-full">
             <vs-input
-              :label="$t('salePoint')"
-              v-model="config.salePoint"
-              class="w-full mt-5"
-              name="salePoint"
+              :label="$t('companyAddress')"
+              v-model="address"
+              class="w-full mt-4"
+              name="company_address"
+              v-validate="'required'"
             />
-            <span class="text-danger"></span>
+            <span class="text-danger">{{ errors.first('step-3.company_address') }}</span>
           </div>
-          <div class="vx-col md:w-1/3 w-full">
-            <vs-input
-              :label="$t('secuence')"
-              v-model="config.secuence"
-              class="w-full mt-5"
-              name="secuence"
+          <GmapMap :center="center" :zoom="14" style="width: 100%; height: 515px">
+            <GmapMarker
+              :key="index"
+              v-for="(m, index) in markers"
+              :position="m.position"
+              :clickable="true"
+              :draggable="true"
+              @click="center=m.position"
+              @drag="updateCoordinates"
             />
-            <span class="text-danger"></span>
-          </div>
-          <div class="vx-col md:w-1/2 w-full md:mt-8">
-            <div class="demo-alignment">
-              <span>{{$t('modeInvoicing')}}</span>
-              <div class="flex">
-                <vs-radio v-model="config.mode" vs-value="2">{{$t('modeProduction')}}</vs-radio>
-                <vs-radio v-model="config.mode" vs-vaule="1">{{$t('modeTest')}}</vs-radio>
-              </div>
-            </div>
-          </div>
+          </GmapMap>
         </div>
       </form>
     </tab-content>
@@ -281,44 +258,38 @@ Validator.localize("es", dict);
 export default {
   data() {
     return {
-      company: null,
-      config: null,
-      proposalTitle: "",
-      jobTitle: "",
-      textarea: "",
-      eventName: "",
-      eventLocation: "san-francisco",
-      status: "plannning"
-      // cityOptions: [
-      //   { text: "New York", value: "new-york" },
-      //   { text: "Chicago", value: "chicago" },
-      //   { text: "San Francisco", value: "san-francisco" },
-      //   { text: "Boston", value: "boston" }
-      // ],
-      // statusOptions: [
-      //   { text: "Plannning", value: "plannning" },
-      //   { text: "In Progress", value: "in progress" },
-      //   { text: "Finished", value: "finished" }
-      // ],
-      // LocationOptions: [
-      //   { text: "New York", value: "new-york" },
-      //   { text: "Chicago", value: "chicago" },
-      //   { text: "San Francisco", value: "san-francisco" },
-      //   { text: "Boston", value: "boston" }
-      // ]
+      phone: "",
+      address: "",
+      center: { lat: -2.8969556, lng: -79.0125272 },
+      markers: [],
+      coordinates: { lat: -2.8969556, lng: -79.0125272 }
     };
   },
   created() {
     this.company = this.$store.state.company.company;
     this.config = this.$store.state.configuration.configuration;
-    // if(this.$store.state.AppActiveUser.identification.length>9 &&)
+    this.$getLocation({
+      enableHighAccuracy: true //defaults to false
+    }).then(coordinates => {
+      this.coordinates = coordinates;
+      this.center.lat = coordinates.lat;
+      this.center.lng = coordinates.lng;
+      this.markers.push({
+        position: { lat: coordinates.lat, lng: coordinates.lng }
+      });
+    });
   },
   computed: {
-    ...mapGetters(["userData"])
+    ...mapGetters(["userData"]),
+    ...mapGetters("company", ["company"])
   },
   methods: {
     ...mapActions(["updateProfile"]),
-    ...mapActions("company", ["saveCompanyData"]),
+    ...mapActions("company", [
+      "saveCompanyData",
+      "saveCompanyLocation",
+      "changeCompanyStatus"
+    ]),
     ...mapActions("configuration", ["saveConfigData"]),
     validateStep1() {
       return new Promise((resolve, reject) => {
@@ -348,14 +319,29 @@ export default {
       return new Promise((resolve, reject) => {
         this.$validator.validateAll("step-3").then(result => {
           if (result) {
-            // this.saveConfigData(this.config);
-            this.$router.replace("/admin/home");
-            resolve(true);
+            this.saveCompanyLocation({
+              id: this.company.id,
+              lat: this.coordinates.lat,
+              lng: this.coordinates.lng,
+              phone: this.phone,
+              address: this.address
+            }).then(result => {
+              this.changeCompanyStatus(2).then(result => {
+                this.$router.replace({ name: "company.home" });
+                resolve(true);
+              });
+            });
           } else {
             reject("correct all values");
           }
         });
       });
+    },
+    updateCoordinates(location) {
+      this.coordinates = {
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng()
+      };
     }
   },
   components: {

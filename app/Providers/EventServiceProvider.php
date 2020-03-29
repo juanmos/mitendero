@@ -22,6 +22,12 @@ class EventServiceProvider extends ServiceProvider
         Verified::class => [
             'App\Listeners\LogVerifiedUser',
         ],
+        'App\Events\NewCompanyEvent' => [
+            'App\Listeners\NewCompanyListener'
+        ],
+        'App\Events\CompanyVerificationPendingEvent'=> [
+            'App\Listeners\CompanyVerificationPendingListener'
+        ]
     ];
 
     /**

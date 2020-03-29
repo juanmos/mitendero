@@ -19,8 +19,8 @@ export default {
     },
     actions: actions,
     getters: {
-        getCompany(state) {
-            return state.rol;
+        company(state) {
+            return state.company;
         }
     }
 }

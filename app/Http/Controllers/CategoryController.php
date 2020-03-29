@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CompanyLocationController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,8 @@ class CompanyLocationController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::root()->with('subcategory')->get();
+        return response()->json(compact('categories'));
     }
 
     /**
@@ -33,26 +34,18 @@ class CompanyLocationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Company $company)
+    public function store(Request $request)
     {
-        $request->validate([
-            'lat'=>'required|numeric',
-            'lng'=>'required|numeric',
-            'address'=>'required',
-            'phone'=>'required',
-        ]);
-        $company->locations()->create($request->all());
-        $company->fresh();
-        return response()->json(['created'=>true,'company'=>$company]);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\CompanyLocation  $companyLocation
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(CompanyLocation $companyLocation)
+    public function show(Category $category)
     {
         //
     }
@@ -60,10 +53,10 @@ class CompanyLocationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\CompanyLocation  $companyLocation
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(CompanyLocation $companyLocation)
+    public function edit(Category $category)
     {
         //
     }
@@ -72,10 +65,10 @@ class CompanyLocationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CompanyLocation  $companyLocation
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CompanyLocation $companyLocation)
+    public function update(Request $request, Category $category)
     {
         //
     }
@@ -83,10 +76,10 @@ class CompanyLocationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CompanyLocation  $companyLocation
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CompanyLocation $companyLocation)
+    public function destroy(Category $category)
     {
         //
     }

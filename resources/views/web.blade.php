@@ -17,7 +17,7 @@
     <div class="main_menu">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container box_1620">
-          <a class="navbar-brand logo_h" href="{{url('/')}}"><img src="{{asset('images/web/logo.png')}}" alt=""></a>
+          <a class="navbar-brand logo_h mb-3" href="{{url('/')}}"><img src="{{asset('images/web/logo.png')}}" alt=""></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -33,7 +33,7 @@
             </ul>
 
             <div class="nav-right text-center text-lg-right py-4 py-lg-0">
-              <a class="button" href="{{url('/comercio/nueva')}}">Registra tu tienda</a>
+              <a class="button" href="{{url('/tienda/nueva')}}">Registra tu tienda</a>
             </div>
           </div> 
         </div>
@@ -49,8 +49,8 @@
 
       <div class="row align-items-center text-center text-md-left">
         <div class="col-md-6 col-lg-5 mb-5 mb-md-0">
-          <h1>Compras a domicilio</h1>
-          <p>Air seed winged lights saw kind whales in sixth dont seas dron image so fish all tree meat dont there is seed winged lights saw kind whales in sixth dont seas dron image so fish all tree meat dont there </p>
+          <h1>Mi Tendero a domicilio</h1>
+          <p>Pide lo q necesites de tu tienda favorita a los precios más convenientes, apoyando a los pequeños negocios!</p>
           <a class="button button-hero mt-4" href="{{url('/login')}}">Iniciar sesión</a>
         </div>
         <div class="col-md-6 col-lg-7 col-xl-6 offset-xl-1">
@@ -148,14 +148,14 @@
         <div class="col-lg-5 col-md-6 align-self-center about-content">
           <h2>REGISTRA<br class="d-none d-xl-block"> tu comercio <br class="d-none d-xl-block"> </h2>
           <p>Registra tu comercio, sea tienda, farmacia, abaceria, minimarket, etc. Nosotros te ayudamos a conseguir clientes para que puedas recibir pedidos en linea.</p>
-          <a class="button" href="{{url('/comercio/nueva')}}">Registrar comercio</a>
+          <a class="button" href="{{url('/tienda/nueva')}}">Registrar comercio</a>
         </div>
       </div>
     </div>
   </section>
   <!--================About Area End =================-->
 
-  <!--================Tour section Start =================-->
+  <!--================Products section Start =================-->
   <section class="section-margin pb-xl-5">
     <div class="container">
       <div class="row">
@@ -211,7 +211,7 @@
             <div class="col-md-3 col-sm-6 col-6">
               <div class="category-card">
                 <img class="card-img rounded-0" src="{{asset('images/web/categories/fish.svg')}}" alt="">
-                <h5>Pescados</h5>
+                <h5>Carnes y Pescados</h5>
               </div>
             </div>
             <div class="col-md-3 col-sm-6 col-6">

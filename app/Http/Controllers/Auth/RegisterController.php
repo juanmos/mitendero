@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Gravatar;
 
 class RegisterController extends Controller
 {
@@ -105,6 +106,8 @@ class RegisterController extends Controller
         }
         event(new Registered($user = $this->create($request->all())));
         $user->assignRole(($type=='comercio')?'Comercio':'Usuario');
+        $user->photo= Gravatar::get($user->email);
+        $user->save();
 
         $credentials = request(['email', 'password']);
 

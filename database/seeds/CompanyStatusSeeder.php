@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\CompanyStatus;
 
 class CompanyStatusSeeder extends Seeder
 {
@@ -11,16 +12,19 @@ class CompanyStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table([
-            'status'=>'Falta de verificacion'
+        CompanyStatus::create([
+            'status'=>'Asistente de configuración'
         ]);
-        DB::table([
+        CompanyStatus::create([
+            'status'=>'Falta de verificación'
+        ]);
+        CompanyStatus::create([
             'status'=>'Activo'
         ]);
-        DB::table([
+        CompanyStatus::create([
             'status'=>'Falta de pago'
         ]);
-        DB::table([
+        CompanyStatus::create([
             'status'=>'Inactivo'
         ]);
     }

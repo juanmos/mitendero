@@ -137,49 +137,13 @@ const router = new Router({
                         import ('./views/Home.vue')
                 },
                 {
-                    path: 'invoices',
-                    name: 'company.invoices',
+                    path: 'products',
+                    name: 'company.products',
                     meta: {
                         rule: 'Empresa'
                     },
                     component: () =>
-                        import ('./views/invoices/Invoices.vue')
-                },
-                {
-                    path: 'payments',
-                    name: 'company.payments',
-                    meta: {
-                        rule: 'Empresa'
-                    },
-                    component: () =>
-                        import ('./views/payments/Payments.vue')
-                },
-                {
-                    path: 'estimates',
-                    name: 'company.estimates',
-                    meta: {
-                        rule: 'Empresa'
-                    },
-                    component: () =>
-                        import ('./views/estimates/Estimates.vue')
-                },
-                {
-                    path: 'expenses',
-                    name: 'company.expenses',
-                    meta: {
-                        rule: 'Empresa'
-                    },
-                    component: () =>
-                        import ('./views/expenses/Expenses.vue')
-                },
-                {
-                    path: 'deductions',
-                    name: 'company.deductions',
-                    meta: {
-                        rule: 'Empresa'
-                    },
-                    component: () =>
-                        import ('./views/deductions/Deductions.vue')
+                        import ('./views/products/Products.vue')
                 },
                 {
                     path: 'clients',
@@ -270,6 +234,15 @@ const router = new Router({
                         }
                     ]
                 },
+                {
+                    path: 'categories',
+                    name: 'admin.categories',
+                    meta: {
+                        rule: 'Admin'
+                    },
+                    component: () =>
+                        import ('./views/categories/Categories.vue')
+                },
             ]
         },
         {
@@ -285,7 +258,7 @@ const router = new Router({
                 // =============================================================================
                 {
                     path: 'company',
-                    name: 'wizard.user',
+                    name: 'wizard.company',
                     meta: {
                         rule: 'Comercio'
                     },
@@ -313,6 +286,28 @@ const router = new Router({
                     },
                     component: () =>
                         import ('./views/home/User.vue')
+                }
+            ]
+        },
+        {
+            path: '/profile',
+            component: () =>
+                import ('@/layouts/main/Main.vue'),
+            meta: {
+                requiresAuth: true
+            },
+            children: [
+                // =============================================================================
+                // PAGES
+                // =============================================================================
+                {
+                    path: '',
+                    name: 'profile',
+                    meta: {
+                        rule: 'Usuario'
+                    },
+                    component: () =>
+                        import ('./views/profile/Profile.vue')
                 }
             ]
         },

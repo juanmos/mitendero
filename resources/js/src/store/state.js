@@ -21,7 +21,7 @@ const userDefaults = {
     first_name: "", // From Auth
     last_name: '',
     about: "Dessert chocolate cake lemon drops jujubes. Biscuit cupcake ice cream bear claw brownie brownie marshmallow.",
-    photoURL: require("@assets/images/portrait/small/avatar-s-11.jpg"), // From Auth
+    photo: require("@assets/images/portrait/small/avatar-s-11.jpg"), // From Auth
     status: "online",
     role: "Empresa",
     active: 1,
