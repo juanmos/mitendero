@@ -142,7 +142,7 @@
       <div class="row">
         <div class="col-lg-7 col-md-6 mb-4 mb-md-0">
           <div class="about-img">
-            <img class="img-fluid" src="{{asset('images/web/home/ubicar.png')}}" alt="">
+            <img class="img-fluid" src="{{asset('images/web/home/miTienda.png')}}" alt="">
           </div>
         </div>
         <div class="col-lg-5 col-md-6 align-self-center about-content">

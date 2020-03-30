@@ -9,7 +9,7 @@
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row no-gutter justify-center items-center">
             <div class="vx-col hidden lg:block lg:w-1/2">
-              <img src="@assets/web/home/ubicar.png" alt="login" class="mx-auto" height="500px" />
+              <img src="@assets/web/home/login.png" alt="login" class="mx-auto" height="500px" />
             </div>
 
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">

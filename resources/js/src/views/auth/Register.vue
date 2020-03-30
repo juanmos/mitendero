@@ -9,7 +9,7 @@
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row no-gutter justify-center items-center">
             <div class="vx-col hidden lg:block lg:w-1/2">
-              <img src="@assets/images/pages/login.png" alt="login" class="mx-auto" />
+              <img src="@assets/web/home/login.png" alt="login" class="mx-auto" height="500px" />
             </div>
 
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
@@ -20,34 +20,40 @@
                 </div>
 
                 <div>
-                  <vs-input
-                    name="first_name"
-                    icon-no-border
-                    icon="icon icon-user"
-                    icon-pack="feather"
-                    :label-placeholder="$t('firstName')"
-                    v-model="first_name"
-                    class="w-full"
-                    v-validate="'required'"
-                  />
-                  <span
-                    class="text-danger text-sm"
-                    v-show="errors.has('first_name')"
-                  >{{ errors.first('first_name') }}</span>
-                  <vs-input
-                    name="last_name"
-                    icon-no-border
-                    icon="icon icon-user"
-                    icon-pack="feather"
-                    :label-placeholder="$t('lastName')"
-                    v-model="last_name"
-                    class="w-full"
-                    v-validate="'required'"
-                  />
-                  <span
-                    class="text-danger text-sm"
-                    v-show="errors.has('last_name')"
-                  >{{ errors.first('last_name') }}</span>
+                  <div class="vx-row">
+                    <div class="vx-col sm:w-1/2 w-full mb-2">
+                      <vs-input
+                        name="first_name"
+                        icon-no-border
+                        icon="icon icon-user"
+                        icon-pack="feather"
+                        :label-placeholder="$t('firstName')"
+                        v-model="first_name"
+                        class="w-full"
+                        v-validate="'required'"
+                      />
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('first_name')"
+                      >{{ errors.first('first_name') }}</span>
+                    </div>
+                    <div class="vx-col sm:w-1/2 w-full mb-2">
+                      <vs-input
+                        name="last_name"
+                        icon-no-border
+                        icon="icon icon-user"
+                        icon-pack="feather"
+                        :label-placeholder="$t('lastName')"
+                        v-model="last_name"
+                        class="w-full"
+                        v-validate="'required'"
+                      />
+                      <span
+                        class="text-danger text-sm"
+                        v-show="errors.has('last_name')"
+                      >{{ errors.first('last_name') }}</span>
+                    </div>
+                  </div>
                   <vs-input
                     type="email"
                     name="email"

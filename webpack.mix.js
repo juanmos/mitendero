@@ -69,7 +69,7 @@ if (mix.inProduction()) {
             chunkFilename: 'js/chunks/[name].[chunkhash].js',
         }
     });
-    mix.setResourceRoot("/demo/vuexy-vuejs-laravel-admin-template/demo-1/");
+    // mix.setResourceRoot("/demo/vuexy-vuejs-laravel-admin-template/demo-1/");
 } else {
     mix.webpackConfig({
         output: {
