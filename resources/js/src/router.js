@@ -236,13 +236,29 @@ const router = new Router({
                 },
                 {
                     path: 'categories',
-                    name: 'admin.categories',
+                    name: '',
                     meta: {
                         rule: 'Admin'
                     },
                     component: () =>
-                        import ('./views/categories/Categories.vue')
+                        import ('./views/companies/CompanyMain.vue'),
+                    children: [{
+                            path: '',
+                            name: 'admin.categories',
+                            component: () =>
+                                import ('./views/categories/Categories.vue')
+                        },
+                        {
+                            path: 'subcategory/:id',
+                            props: true,
+                            name: 'admin.categories.subcategory',
+                            component: () =>
+                                import ('./views/categories/Products.vue')
+                        }
+                    ]
+
                 },
+
             ]
         },
         {
@@ -330,7 +346,8 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
 
         if (store.getters['auth/getRol'] == 'SuperAdministrador') {
-            return next('/admin/companies');
+            // if (from.name);
+            // return next('/admin/companies');
         }
         return next()
             // return next('/company/home')

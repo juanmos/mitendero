@@ -39,4 +39,5 @@ Route::group(['middleware' => 'api'], function () {
 
     //CATEGORIES
     Route::get('/categories', 'CategoryController@index')->name('category.index');
+    Route::get('category/{category}', 'CategoryController@show')->name('category.show');
 });

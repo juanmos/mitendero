@@ -19,6 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('icon')->nullable();
             $table->integer('category_id')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\CompanyLocation;
 use App\Models\CompanyStatus;
 use App\Models\CompanyType;
@@ -11,6 +12,8 @@ use App\Models\User;
 
 class Company extends Model
 {
+    use softDeletes;
+    
     protected $fillable=[
         'company_name',
         'company_alias',

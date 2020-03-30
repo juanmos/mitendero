@@ -16,11 +16,12 @@
     <link rel="stylesheet" href="{{ asset(mix('css/prism-tomorrow.css')) }}">
     <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('images/logo/favicon.png') }}">
+    {{-- <link rel="shortcut icon" href="{{ asset('images/logo/favicon.png') }}"> --}}
+    <link rel="icon" href="{{asset('images/web/Fevicon.png')}}" type="image/png">
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>Lo lamentamos pero Mi Tendero necesita un navegador con JavaScript compatible. Por favor habilitado para continuar.</strong>
     </noscript>
     <div id="app">
     </div>

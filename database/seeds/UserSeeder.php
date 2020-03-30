@@ -29,7 +29,8 @@ class UserSeeder extends Seeder
             'email' => 'juanmos@gmail.com',
             'password' => bcrypt('123456'),
             'phone' => '0991704980',
-            'identification' => '0103086773'
+            'identification' => '0103086773',
+            'email_verified_at'=>now()
         ]);
         DB::table('users')->insert([
             'first_name' => 'Juan',
@@ -38,8 +39,19 @@ class UserSeeder extends Seeder
             'password' => bcrypt('123456'),
             'phone' => '0991704980',
             'identification' => '0103086773',
-            'company_id'=>0
+            'company_id'=>0,
+            'email_verified_at'=>now()
         ]);
+        DB::table('users')->insert([
+            'first_name' => 'Rolando',
+            'last_name' => 'Pena',
+            'email' => 'rolando.pena@leveringsys.com',
+            'password' => bcrypt('123456'),
+            'phone' => '0991704980',
+            'identification' => '0103086773',
+            'email_verified_at'=>now()
+        ]);
+
         DB::table('model_has_roles')->insert([
             'role_id' => '1',
             'model_type' => 'App\Models\User',
@@ -49,6 +61,11 @@ class UserSeeder extends Seeder
             'role_id' => '2',
             'model_type' => 'App\Models\User',
             'model_id' => '2'
+        ]);
+        DB::table('model_has_roles')->insert([
+            'role_id' => '1',
+            'model_type' => 'App\Models\User',
+            'model_id' => '3'
         ]);
     }
 }

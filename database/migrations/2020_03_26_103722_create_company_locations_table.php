@@ -21,6 +21,7 @@ class CreateCompanyLocationsTable extends Migration
             $table->decimal('lat', 14, 10)->nullable();
             $table->decimal('lng', 14, 10)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

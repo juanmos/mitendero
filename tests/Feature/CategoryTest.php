@@ -27,8 +27,16 @@ class CategoryTest extends TestCase
      */
     public function testCategoryList()
     {
-        $response = $this->get('/api/categories');
+        $response = $this->get('/api/categories', $this->headers);
         $response->assertStatus(200);
         $response->assertJsonStructure(['categories']);
+    }
+
+    /** @test */
+    public function testGetCategoryShow()
+    {
+        $response = $this->get("api/category/1", $this->headers);
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['category']);
     }
 }

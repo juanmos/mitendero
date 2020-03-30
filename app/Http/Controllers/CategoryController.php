@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::root()->with('subcategory')->get();
+        $categories = Category::root()->get();
         return response()->json(compact('categories'));
     }
 
@@ -23,9 +23,8 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function categoryById(Category $category)
     {
-        //
     }
 
     /**
@@ -47,7 +46,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return response()->json(compact('category'));
     }
 
     /**

@@ -9,10 +9,10 @@
 
 
 <template>
-  <div id="knowledge-base-page">
+  <div id="category-page">
     <!-- JUMBOTRON -->
-    <div class="knowledge-base-jumbotron">
-      <div class="knowledge-base-jumbotron-content lg:p-32 md:p-24 sm:p-16 p-8 rounded-lg mb-base">
+    <div class="category-jumbotron">
+      <div class="category-jumbotron-content p-8 rounded-lg mb-base">
         <h1 class="mb-1">Buscar categoria</h1>
 
         <vs-input
@@ -38,7 +38,11 @@
         <vx-card class="text-center cursor-pointer">
           <div class="category">
             <div class="category-info">
-              <p class="font-semibold">{{ item.category.toUpperCase() }}</p>
+              <p class="font-semibold">
+                <router-link
+                  :to="{name:'admin.categories.subcategory', params:{id:item.id}}"
+                >{{ item.category.toUpperCase() }}</router-link>
+              </p>
               <span class="activity-desc">{{ item.desc }}</span>
             </div>
             <div class="category-icon">
@@ -57,7 +61,9 @@
               :key="subcategory.id"
               class="py-2 text-left"
             >
-              <router-link :to="subcategory.id">{{ subcategory.category }}</router-link>
+              <router-link
+                :to="{name:'admin.categories.subcategory', params:{id:subcategory.category_id}}"
+              >{{ subcategory.category }}</router-link>
             </li>
           </ul>
         </vx-card>
@@ -121,7 +127,7 @@ export default {
   }
 }
 
-.knowledge-base-jumbotron-content {
+.category-jumbotron-content {
   //   background-image: url("../../assets/images/pages/knowledge-base-cover.jpg");
   background-size: cover;
 }

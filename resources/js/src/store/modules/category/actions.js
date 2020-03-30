@@ -15,5 +15,18 @@ export default {
                 })
         })
     },
-
+    fetchCategory({
+        commit
+    }, categoryId) {
+        return new Promise((resolve, reject) => {
+            axios.get(`/api/category/${categoryId}`)
+                .then((response) => {
+                    commit('SET_CATEGORY', response.data.category)
+                    resolve(response)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+        })
+    },
 }
