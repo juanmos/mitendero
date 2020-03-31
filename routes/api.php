@@ -5,17 +5,21 @@ Route::post('company/suggestion', 'CompanySuggestionController@store');
 Route::group(['prefix' => 'auth','middleware'=>'api', 'namespace'=>'Auth'], function () {
     Route::post('login', ['as'=>'login','uses'=>'LoginController@login']);
     Route::post('signup/{type}', ['as'=>'signup','uses'=>'RegisterController@register']);
+});
+
+Route::group(['prefix' => 'auth','middleware'=>'auth:api', 'namespace'=>'Auth'], function () {
     Route::get('me', ['as'=>'me','uses'=>'LoginController@me']);
     Route::get('verify/user/{id}/{hash}', ['as'=>'verification.verify', 'uses' => 'VerificationController@verify' ]);
     Route::get('verify/resend', 'VerificationController@resend');
 });
 
-Route::group(['prefix' => 'profile','middleware'=>'api'], function () {
+
+Route::group(['prefix' => 'profile','middleware'=>'auth:api'], function () {
     Route::put('/user', 'ProfileController@update')->name('profile.update');
 });
 
 
-Route::group(['middleware' => 'api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     //COMPANIES
     Route::get('/companies', 'CompanyController@index')->name('company.index');
     Route::get('/companies/types', 'CompanyController@companyTypes')->name('company.types');
@@ -40,4 +44,11 @@ Route::group(['middleware' => 'api'], function () {
     //CATEGORIES
     Route::get('/categories', 'CategoryController@index')->name('category.index');
     Route::get('category/{category}', 'CategoryController@show')->name('category.show');
+
+    //CATEGORY PRODUCTS
+    Route::get('/category/{category}/products/{paginate?}', 'ProductController@index')->name('category.products.index');
+
+    //BRANDS
+    Route::get('brands', 'BrandController@index')->name('brand.index');
+    Route::post('brand', 'BrandController@store')->name('brand.store');
 });
