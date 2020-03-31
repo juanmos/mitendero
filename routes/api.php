@@ -51,4 +51,5 @@ Route::group(['middleware' => 'auth:api'], function () {
     //BRANDS
     Route::get('brands', 'BrandController@index')->name('brand.index');
     Route::post('brand', 'BrandController@store')->name('brand.store');
+    Route::put('brand/{brand}', 'BrandController@update')->name('brand.update');
 });

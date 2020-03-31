@@ -45,6 +45,18 @@ class BrandTest extends TestCase
         $this->assertCount(1, Brand::all());
     }
 
+    /** @test */
+    public function testUpdateBrand()
+    {
+        $brand=factory(Brand::class)->create();
+        $response = $this->put("/api/brand/{$brand->id}", $this->brandData());
+        $response->assertOk();
+        $response->assertJsonStructure(['brand']);
+        $this->assertCount(1, Brand::all());
+        $this->assertEquals('Coca-Cola', $brand->fresh()->name);
+    }
+    
+
 
     private function brandData()
     {
