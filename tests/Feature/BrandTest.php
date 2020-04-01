@@ -35,6 +35,16 @@ class BrandTest extends TestCase
         $response->assertJsonCount(15, 'brands');
     }
 
+    public function testBrandSearch()
+    {
+        factory(Brand::class, 15)->create();
+        factory(Brand::class)->create(['name'=>'Coca-cola']);
+        $response = $this->get('api/brand/search/coca-co');
+        $response->assertOk();
+        $response->assertJsonStructure(['brands']);
+        $response->assertJsonCount(1, 'brands');
+    }
+
     /** @test */
     public function testCreateBrand()
     {

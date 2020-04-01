@@ -24,9 +24,12 @@ class BrandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function search($term)
     {
-        //
+        $brands = Brand::orderBy('name')
+                ->where('name', 'like', "%{$term}%")
+                ->get();
+        return response()->json(compact('brands'));
     }
 
     /**
