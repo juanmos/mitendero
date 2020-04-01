@@ -20,7 +20,7 @@
     v-model="isSidebarActiveLocal"
   >
     <div class="mt-6 flex items-center justify-between px-6">
-      <h4>{{ isNew ? $t('newProduct') : $t('updateProduct') }}</h4>
+      <h4>{{ isNew() ? $t('newProduct') : $t('updateProduct') }}</h4>
       <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
     </div>
     <vs-divider class="mb-0"></vs-divider>
@@ -129,25 +129,13 @@
           name="photo"
           @change="onFileChanged"
         />
-        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-          <label class="vs-input--label">{{$t('photos')}}</label>
-          <vs-upload
-            multiple
-            :text="$t('uploadFile')"
-            action="http://tiendaweb.test/api/product/photo"
-            automatic
-            @on-success="successUpload"
-          />
-        </div>
-        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-          <label class="vs-input--label">{{$t('nutritionalFacts')}}</label>
-
-          <vs-upload
-            :label="$t('nutritionalFacts')"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            @on-success="successUpload"
-          />
-        </div>
+        <vs-input
+          type="file"
+          :label="$t('nutritionalFacts')"
+          class="mt-5 w-full"
+          name="photo"
+          @change="onFileNutsChanged"
+        />
       </div>
     </VuePerfectScrollbar>
 
@@ -227,7 +215,8 @@ export default {
         wheelSpeed: 0.6,
         url: "http://tiendaweb.test/api/product/photo"
       },
-      selectedFile: null
+      selectedFile: null,
+      nutritionalFile: null
     };
   },
   computed: {
@@ -251,13 +240,8 @@ export default {
         this.presentation &&
         this.name
       );
-    },
-    isNew() {
-      let obj = Object.entries(Object.assign({}, this.data));
-      console.log(obj);
-      delete obj.category_id;
-      return obj.length === 0;
     }
+
     // ...mapState("users", ["roles"])
   },
   methods: {
@@ -272,6 +256,8 @@ export default {
       this.price = "";
       this.brand_id = 0;
       this.presentation = "";
+      this.selectedFile = null;
+      this.nutritionalFile = null;
     },
     submitData() {
       this.$validator.validateAll().then(result => {
@@ -286,7 +272,8 @@ export default {
             description: this.description,
             brand_name: this.brand,
             brand_id: this.brand_id,
-            photo: this.selectedFile
+            photo: this.selectedFile,
+            nutritionalFacts: this.nutritionalFile
           };
 
           if (this.dataId !== null && this.dataId >= 0) {
@@ -334,8 +321,13 @@ export default {
     onFileChanged(event) {
       this.selectedFile = event.target.files[0];
     },
-    onUpload() {
-      // upload file
+    onFileNutsChanged() {
+      this.nutritionalFile = event.target.files[0];
+    },
+    isNew() {
+      let obj = Object.assign({}, this.data);
+      delete obj.category_id;
+      return Object.entries(obj).length === 0;
     }
   },
   components: {
