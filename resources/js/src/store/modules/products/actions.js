@@ -3,21 +3,42 @@ import axios from "@/axios.js"
 export default {
     fetchProducts({
         commit
-    }, category_id) {
+    }, category_id, limit) {
         return new Promise((resolve, reject) => {
-            axios.get(`api/category/${category_id}/products`).then(response => {
-                commit('SET_PRODUCTS', response.data.products, category_id);
+            if (limit == undefined) {
+                limit = 6;
+            }
+            axios.get(`api/category/${category_id}/products/${limit}`).then(response => {
+                commit('SET_PRODUCTS', Object.assign(response.data.products, {
+                    category_id: category_id
+                }))
                 resolve(response.data.products);
             })
         })
     },
-    addProduct({
+    fetchProductBrands({
         commit
+    }, category_id) {
+        return new Promise((resolve, reject) => {
+            axios.get(`api/category/${category_id}/brands`).then(response => {
+                resolve(response.data.brands);
+            })
+        })
+    },
+    addProduct({
+        commit,
+        dispatch
     }, product) {
         return new Promise((resolve, reject) => {
-            axios.post(`api/category/${product.category_id}/product`, product).then(response => {
-                console.log(response);
+            var formData = new FormData();
+            Object.keys(product).forEach(key => {
+                formData.append(key, product[key]);
+            })
+            axios.post(`api/category/${product.category_id}/product`, formData).then(response => {
+                dispatch('fetchProducts', product.category_id)
                 resolve(response);
+            }).catch(err => {
+                reject(err);
             })
         })
     },

@@ -255,6 +255,12 @@ const router = new Router({
                             name: 'admin.categories.subcategory',
                             component: () =>
                                 import ('./views/categories/Products.vue')
+                        }, {
+                            path: 'subcategory/:id/all',
+                            props: true,
+                            name: 'admin.categories.subcategory.all',
+                            component: () =>
+                                import ('./views/categories/ProductsAll.vue')
                         }
                     ]
 

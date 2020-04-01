@@ -23,26 +23,35 @@
     </div>
     <div class="vx-row">
       <div class="vx-col w-full md:w-2/5 lg:w-1/4">
-        <vx-card :title="category.category">
+        <vx-card title="Marcas">
           <ul class="bordered-items">
-            <li
-              v-for="subcategory in category.subcategory"
-              :key="subcategory.id"
-              class="py-2"
-            >{{ subcategory.category }}</li>
-            <li class="py-2">Todos</li>
+            <li v-for="brand in brands" :key="brand.id" class="py-2">
+              <vs-checkbox>{{ brand.name }}</vs-checkbox>
+            </li>
           </ul>
         </vx-card>
         <vs-button type="border" text-color="#7367F0" @click="handleBack">Volver</vs-button>
       </div>
       <div class="vx-col w-full md:w-3/5 lg:w-3/4">
-        <product-list
-          v-for="subcategory in category.subcategory"
-          :key="subcategory.id"
-          class="py-2 mb-4"
-          :subcategory="subcategory"
-          :openSidebar="addNewData"
-        />
+        <div v-if="products">
+          <vx-card :title="category.category" :subtitle="available + ' items disponibles'">
+            <div slot="actions">
+              <div class="vx-card__action-buttons">
+                <vs-button
+                  radius
+                  color="primary"
+                  type="filled"
+                  icon-pack="feather"
+                  icon="icon-plus"
+                  @click="addNewData(category.id)"
+                ></vs-button>
+              </div>
+            </div>
+            <div class="vx-row">
+              <product-view v-for="product in products.data" :key="product.id" :product="product"></product-view>
+            </div>
+          </vx-card>
+        </div>
       </div>
     </div>
   </div>
@@ -50,7 +59,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import ProductList from "./ProductList.vue";
+import ProductView from "./ProductView.vue";
 import ProductSidebar from "./ProductSidebar.vue";
 export default {
   data() {
@@ -58,15 +67,24 @@ export default {
       productSearchQuery: "",
       // Data Sidebar
       addNewDataSidebar: false,
-      sidebarData: {}
+      sidebarData: {},
+      brands: []
     };
   },
   props: ["id"],
   computed: {
-    ...mapGetters("category", ["category"])
+    ...mapGetters("category", ["category"]),
+    ...mapGetters("products", ["getProducts"]),
+    products() {
+      return this.getProducts(this.id);
+    },
+    available() {
+      return this.products ? this.products.total : 0;
+    }
   },
   methods: {
     ...mapActions("category", ["fetchCategory"]),
+    ...mapActions("products", ["fetchProducts", "fetchProductBrands"]),
     addNewData(category_id) {
       this.sidebarData = {
         category_id: category_id
@@ -82,8 +100,12 @@ export default {
   },
   created() {
     this.fetchCategory(this.id);
+    this.fetchProducts(this.id, 50);
+    this.fetchProductBrands(this.id).then(brands => {
+      this.brands = brands;
+    });
   },
-  components: { ProductList, ProductSidebar }
+  components: { ProductView, ProductSidebar }
 };
 </script>
 

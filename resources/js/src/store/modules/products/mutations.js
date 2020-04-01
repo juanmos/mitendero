@@ -1,8 +1,5 @@
 export default {
-    SET_PRODUCTS(state, products, category) {
-        state.products.push({
-            category: category,
-            products: products
-        });
+    SET_PRODUCTS(state, products) {
+        state.products.unshift(products);
     },
 }
