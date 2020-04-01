@@ -10,12 +10,32 @@
         @click="openSidebar(subcategory.id)"
       ></vs-button>
     </div>
+    <product-view v-for="product in products.data" :key="product.id" :product="product"></product-view>
   </vx-card>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import ProductView from "./ProductView.vue";
 export default {
-  props: ["subcategory", "openSidebar"]
+  props: ["subcategory", "openSidebar"],
+  data() {
+    return {
+      products: []
+    };
+  },
+  methods: {
+    ...mapActions("products", ["fetchProducts"])
+  },
+  computed: {
+    // ...mapGetters("products", ["products"])
+  },
+  created() {
+    this.fetchProducts(this.subcategory.id).then(products => {
+      this.products = products;
+    });
+  },
+  components: { ProductView }
 };
 </script>
 

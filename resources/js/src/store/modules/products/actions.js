@@ -1,6 +1,16 @@
 import axios from "@/axios.js"
 
 export default {
+    fetchProducts({
+        commit
+    }, category_id) {
+        return new Promise((resolve, reject) => {
+            axios.get(`api/category/${category_id}/products`).then(response => {
+                commit('SET_PRODUCTS', response.data.products, category_id);
+                resolve(response.data.products);
+            })
+        })
+    },
     addProduct({
         commit
     }, product) {
