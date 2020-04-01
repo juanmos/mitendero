@@ -141,6 +141,10 @@ class CategorySeeder extends Seeder
         $bebidas->subcategory()->create([
             'category'=>'Jugos'
         ]);
+        $bebidas->subcategory()->create([
+            'category'=>'Energizantes'
+        ]);
+
 
         $carnes->subcategory()->create([
             'category'=>'Carne de res'

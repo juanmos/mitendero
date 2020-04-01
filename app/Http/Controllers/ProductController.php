@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductPhoto;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -16,7 +17,11 @@ class ProductController extends Controller
      */
     public function index(Category $category, $paginate = 6)
     {
-        $products = Product::categoryFilter($category->id)->paginate($paginate);
+        $products = Product::categoryFilter($category->id)
+                ->with(['photos'=> function ($query) {
+                    $query->default();
+                }])
+                ->paginate($paginate);
         return response()->json(compact('products'));
     }
 
@@ -38,14 +43,34 @@ class ProductController extends Controller
             'price'=>'required',
         ]);
 
-        $data=$request->all();
+        $data=$request->except('photo');
         $brand = Brand::find($request->get('brand_id'));
         if ($brand==null) {
             $brand = Brand::create(['name'=>$request->get('brand_name')]);
         }
         $data['brand_id']=$brand->id;
         $product= $category->products()->create($data);
+
+        if ($request->has('photo')) {
+            $path = $request->file('photo')->store('public/products');
+            $productPhoto= $product->photos()->create([
+                'photo'=>$path
+            ]);
+        }
+
         return response()->json(compact('product'));
+    }
+
+    public function uploadPhoto(Request $request)
+    {
+        if ($request->has('photo')) {
+            $path = $request->file('photo')->store('public/products');
+            $productPhoto= ProductPhoto::create([
+                'photo'=>$path
+            ]);
+            return response()->json(compact('productPhoto'));
+        }
+        abort(404);
     }
 
     /**

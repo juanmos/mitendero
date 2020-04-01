@@ -1,16 +1,28 @@
 <template>
-  <vx-card :title="subcategory.category">
+  <vx-card :title="subcategory.category" :subtitle="available + ' items disponibles'">
     <div slot="actions">
-      <vs-button
-        radius
-        color="primary"
-        type="filled"
-        icon-pack="feather"
-        icon="icon-plus"
-        @click="openSidebar(subcategory.id)"
-      ></vs-button>
+      <div class="vx-card__action-buttons">
+        <vs-button
+          radius
+          color="primary"
+          type="filled"
+          icon-pack="feather"
+          icon="icon-plus"
+          @click="openSidebar(subcategory.id)"
+        ></vs-button>
+        <vs-button
+          radius
+          color="success"
+          type="border"
+          icon-pack="feather"
+          icon="icon-eye"
+          @click="openAll(subcategory.id)"
+        ></vs-button>
+      </div>
     </div>
-    <product-view v-for="product in products.data" :key="product.id" :product="product"></product-view>
+    <div class="vx-row" v-if="products">
+      <product-view v-for="product in products.data" :key="product.id" :product="product"></product-view>
+    </div>
   </vx-card>
 </template>
 
@@ -19,21 +31,26 @@ import { mapActions, mapGetters } from "vuex";
 import ProductView from "./ProductView.vue";
 export default {
   props: ["subcategory", "openSidebar"],
-  data() {
-    return {
-      products: []
-    };
-  },
   methods: {
-    ...mapActions("products", ["fetchProducts"])
+    ...mapActions("products", ["fetchProducts"]),
+    openAll(subcategory) {
+      this.$router.push({
+        name: "admin.categories.subcategory.all",
+        params: { id: subcategory }
+      });
+    }
   },
   computed: {
-    // ...mapGetters("products", ["products"])
+    products() {
+      return this.getProducts(this.subcategory.id);
+    },
+    available() {
+      return this.products ? this.products.total : 0;
+    },
+    ...mapGetters("products", ["getProducts"])
   },
-  created() {
-    this.fetchProducts(this.subcategory.id).then(products => {
-      this.products = products;
-    });
+  beforeMount() {
+    this.fetchProducts(this.subcategory.id);
   },
   components: { ProductView }
 };

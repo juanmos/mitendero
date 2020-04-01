@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\ProductPhoto;
 
 class Product extends Model
 {
@@ -22,7 +23,9 @@ class Product extends Model
         'nutritional_facts'
     ];
 
-    protected $with = ['brand'];
+    protected $with = [
+        'brand'
+    ];
 
     public function brand()
     {
@@ -34,6 +37,10 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    public function photos()
+    {
+        return $this->hasMany(ProductPhoto::class, 'product_id');
+    }
 
     public function scopeCategoryFilter($query, $id)
     {

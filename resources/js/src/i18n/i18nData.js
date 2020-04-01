@@ -201,6 +201,7 @@ export default {
         description: 'Descripción',
         ingredients: 'Ingredientes',
         nutritionalFacts: 'Datos nutricionales',
-        photos: 'Fotos'
+        photos: 'Fotos',
+        uploadFile: 'Subir foto'
     },
 }

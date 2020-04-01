@@ -20,7 +20,7 @@
     v-model="isSidebarActiveLocal"
   >
     <div class="mt-6 flex items-center justify-between px-6">
-      <h4>{{ Object.entries(this.data).length === 0 ? $t('newProduct') : $t('updateProduct') }}</h4>
+      <h4>{{ isNew ? $t('newProduct') : $t('updateProduct') }}</h4>
       <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
     </div>
     <vs-divider class="mb-0"></vs-divider>
@@ -79,14 +79,6 @@
             </div>
           </vue-simple-suggest>
         </div>
-        <!-- <vs-input
-          :label="$t('brand')"
-          v-model="brand"
-          class="mt-5 w-full"
-          name="brand"
-          v-validate="'required'"
-        />
-        <span class="text-danger text-sm" v-show="errors.has('brand')">{{ errors.first('brand') }}</span>-->
 
         <vs-input
           :label="$t('price')"
@@ -130,19 +122,32 @@
           class="text-danger text-sm"
           v-show="errors.has('ingredients')"
         >{{ errors.first('ingredients') }}</span>
-        <span>{{$t('photos')}}</span>
-        <vs-upload
-          multiple
+        <vs-input
+          type="file"
           :label="$t('photos')"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          @on-success="successUpload"
+          class="mt-5 w-full"
+          name="photo"
+          @change="onFileChanged"
         />
-        <span>{{$t('nutritionalFacts')}}</span>
-        <vs-upload
-          :label="$t('nutritionalFacts')"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          @on-success="successUpload"
-        />
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label class="vs-input--label">{{$t('photos')}}</label>
+          <vs-upload
+            multiple
+            :text="$t('uploadFile')"
+            action="http://tiendaweb.test/api/product/photo"
+            automatic
+            @on-success="successUpload"
+          />
+        </div>
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label class="vs-input--label">{{$t('nutritionalFacts')}}</label>
+
+          <vs-upload
+            :label="$t('nutritionalFacts')"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            @on-success="successUpload"
+          />
+        </div>
       </div>
     </VuePerfectScrollbar>
 
@@ -159,6 +164,7 @@ import { mapState, mapActions } from "vuex";
 import VueSimpleSuggest from "vue-simple-suggest";
 import "vue-simple-suggest/dist/styles.css";
 import Prism from "vue-prism-component";
+import axios from "@/axios";
 
 export default {
   props: {
@@ -218,8 +224,10 @@ export default {
       settings: {
         // perfectscrollbar settings
         maxScrollbarLength: 60,
-        wheelSpeed: 0.6
-      }
+        wheelSpeed: 0.6,
+        url: "http://tiendaweb.test/api/product/photo"
+      },
+      selectedFile: null
     };
   },
   computed: {
@@ -243,6 +251,12 @@ export default {
         this.presentation &&
         this.name
       );
+    },
+    isNew() {
+      let obj = Object.entries(Object.assign({}, this.data));
+      console.log(obj);
+      delete obj.category_id;
+      return obj.length === 0;
     }
     // ...mapState("users", ["roles"])
   },
@@ -271,22 +285,32 @@ export default {
             presentation: this.presentation,
             description: this.description,
             brand_name: this.brand,
-            brand_id: this.brand_id
+            brand_id: this.brand_id,
+            photo: this.selectedFile
           };
 
           if (this.dataId !== null && this.dataId >= 0) {
-            this.$store.dispatch("users/updateUser", obj).catch(err => {
-              console.error(err);
-            });
+            this.$store
+              .dispatch("users/updateUser", obj)
+              .then(result => {
+                this.$emit("closeSidebar");
+                this.initValues();
+              })
+              .catch(err => {
+                console.error(err);
+              });
           } else {
             delete obj.id;
-            this.$store.dispatch("products/addProduct", obj).catch(err => {
-              console.error(err);
-            });
+            this.$store
+              .dispatch("products/addProduct", obj)
+              .then(result => {
+                this.$emit("closeSidebar");
+                this.initValues();
+              })
+              .catch(err => {
+                console.error(err);
+              });
           }
-
-          this.$emit("closeSidebar");
-          this.initValues();
         }
       });
     },
@@ -305,16 +329,13 @@ export default {
       });
     },
     onSuggestSelect(suggest) {
-      console.log(suggest.id);
       this.brand_id = suggest.id;
     },
-    boldenSuggestion(scope) {
-      if (!scope) return scope;
-      const { suggestion, query } = scope;
-      console.log(suggestion.name);
-      let result = this.$refs.suggestComponent.displayProperty(suggestion);
-      console.log(result);
-      return result.name;
+    onFileChanged(event) {
+      this.selectedFile = event.target.files[0];
+    },
+    onUpload() {
+      // upload file
     }
   },
   components: {
@@ -324,6 +345,7 @@ export default {
   },
   mounted() {
     // this.fetchRoles();
+    console.log(this.headers);
   }
 };
 </script>
