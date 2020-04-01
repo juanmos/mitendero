@@ -61,8 +61,10 @@ class ProductController extends Controller
 
         if ($request->has('photo')) {
             $path = $request->file('photo')->store('public/products');
+            $default = ($product->photos->count()>0)?0:1;
             $productPhoto= $product->photos()->create([
-                'photo'=>$path
+                'photo'=>$path,
+                'default'=>$default
             ]);
         }
         if ($request->has('nutritionalFacts')) {
