@@ -25,6 +25,14 @@ class ProductController extends Controller
         return response()->json(compact('products'));
     }
 
+    public function brands(Category $category)
+    {
+        $brands = Brand::whereHas('products', function ($query) use ($category) {
+            $query->where('category_id', $category->id);
+        })->get();
+        return response()->json(compact('brands'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *

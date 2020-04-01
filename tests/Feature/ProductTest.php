@@ -4,10 +4,13 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\ProductPhoto;
 
 class ProductTest extends TestCase
 {
@@ -37,17 +40,22 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function testProductSearch()
+    public function testProductsBrands()
     {
-        // assertions
+        $this->withoutExceptionHandling();
+        $brand=factory(Brand::class)->create(['name'=>'Sunny']);
+        factory(Product::class, 5)->create(['category_id'=>17]);
+        factory(Product::class, 5)->create(['category_id'=>17, 'brand_id'=>$brand->id]);
+        $response = $this->get('api/category/17/brands');
+        $response->assertOk();
+        $response->assertJsonStructure(['brands']);
+        $response->dump();
     }
     
 
     /** @test */
     public function testCreateProductWithBrandId()
     {
-        $this->withoutExceptionHandling();
-
         $brand = factory(Brand::class)->create();
         $response = $this->post("api/category/17/product", array_merge($this->productData(), ['brand_id'=>$brand->id]));
         $response->assertOk();
@@ -67,6 +75,28 @@ class ProductTest extends TestCase
         $this->assertCount(2, Brand::all());
     }
 
+    /** @test */
+    public function testUploadProductPhoto()
+    {
+        Storage::fake('photos');
+        $response = $this->post(
+            "api/category/17/product",
+            array_merge(
+                $this->productData(),
+                [
+                    'brand_id'=>0,
+                    'brand_name'=>'Coca-cola',
+                    'photo'=>UploadedFile::fake()->image('photo1.jpg')
+                ]
+            )
+        );
+        $response->assertOk();
+        $response->assertJsonStructure(['product']);
+        $this->assertCount(1, Product::all());
+        $this->assertCount(1, Brand::all());
+        $this->assertCount(1, ProductPhoto::all());
+    }
+    
     
     private function productData()
     {
