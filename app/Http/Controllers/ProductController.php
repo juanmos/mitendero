@@ -51,7 +51,7 @@ class ProductController extends Controller
             'price'=>'required',
         ]);
 
-        $data=$request->except('photo');
+        $data=$request->except(['photo','nutritionalFacts']);
         $brand = Brand::find($request->get('brand_id'));
         if ($brand==null) {
             $brand = Brand::create(['name'=>$request->get('brand_name')]);
@@ -65,6 +65,12 @@ class ProductController extends Controller
                 'photo'=>$path
             ]);
         }
+        if ($request->has('nutritionalFacts')) {
+            $path = $request->file('nutritionalFacts')->store('public/nutrition');
+            $product->nutritional_facts=$path;
+            $product->save();
+        }
+
 
         return response()->json(compact('product'));
     }
