@@ -181,7 +181,8 @@ export default {
           description,
           ingredients,
           category_id,
-          presentation
+          presentation,
+          limit
         } = JSON.parse(JSON.stringify(this.data));
         this.dataId = id;
         this.name = name;
@@ -192,6 +193,7 @@ export default {
         this.ingredients = ingredients;
         this.category_id = category_id;
         this.presentation = presentation;
+        this.limit = limit;
         this.initValues();
       }
       // Object.entries(this.data).length === 0 ? this.initValues() : { this.dataId, this.dataName, this.dataCategory, this.dataOrder_status, this.dataPrice } = JSON.parse(JSON.stringify(this.data))
@@ -272,9 +274,14 @@ export default {
             description: this.description,
             brand_name: this.brand,
             brand_id: this.brand_id,
-            photo: this.selectedFile,
-            nutritionalFacts: this.nutritionalFile
+            limit: this.limit
           };
+          if (this.selectedFile != null) {
+            obj.photo = this.selectedFile;
+          }
+          if (this.nutritionalFile != null) {
+            obj.nutritionalFacts = this.nutritionalFile;
+          }
 
           if (this.dataId !== null && this.dataId >= 0) {
             this.$store
@@ -327,6 +334,7 @@ export default {
     isNew() {
       let obj = Object.assign({}, this.data);
       delete obj.category_id;
+      delete obj.limit;
       return Object.entries(obj).length === 0;
     }
   },
@@ -337,7 +345,6 @@ export default {
   },
   mounted() {
     // this.fetchRoles();
-    console.log(this.headers);
   }
 };
 </script>
