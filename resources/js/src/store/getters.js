@@ -26,6 +26,9 @@ const getters = {
     },
     userData: state => {
         return state.AppActiveUser
+    },
+    user: state => {
+        return JSON.parse(JSON.stringify(state.AppActiveUser));
     }
 }
 

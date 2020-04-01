@@ -24,7 +24,7 @@ export default {
   methods: {
     ...mapGetters("auth", ["getRol"])
   },
-  beforeMount() {
+  beforeCreate() {
     this.$store.dispatch("auth/tryAutoLogin");
     this.getRol();
   }

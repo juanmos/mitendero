@@ -220,7 +220,7 @@ const dict = {
       min: "Must be at least 6 digits"
     },
     mobile: {
-      required: "Email is required",
+      required: "Mobile is required",
       integer: "Please enter only digits",
       min: "Must be at least 6 digits"
     },
@@ -262,7 +262,8 @@ export default {
       address: "",
       center: { lat: -2.8969556, lng: -79.0125272 },
       markers: [],
-      coordinates: { lat: -2.8969556, lng: -79.0125272 }
+      coordinates: { lat: -2.8969556, lng: -79.0125272 },
+      userData: null
     };
   },
   created() {
@@ -279,8 +280,13 @@ export default {
       });
     });
   },
+  beforeCreate() {
+    this.userData = Object.assign({}, { ...mapGetters(["user"]) });
+  },
   computed: {
-    ...mapGetters(["userData"]),
+    // userData() {
+    //   return Object.assign({}, ...mapGetters(["userData"]));
+    // },
     ...mapGetters("company", ["company"])
   },
   methods: {
