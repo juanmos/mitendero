@@ -87,7 +87,8 @@ export default {
     ...mapActions("products", ["fetchProducts", "fetchProductBrands"]),
     addNewData(category_id) {
       this.sidebarData = {
-        category_id: category_id
+        category_id: category_id,
+        limit: 50
       };
       this.toggleDataSidebar(true);
     },
@@ -100,7 +101,7 @@ export default {
   },
   created() {
     this.fetchCategory(this.id);
-    this.fetchProducts(this.id, 50);
+    this.fetchProducts({ category_id: this.id, limit: 50 });
     this.fetchProductBrands(this.id).then(brands => {
       this.brands = brands;
     });

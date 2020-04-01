@@ -3,7 +3,10 @@ import axios from "@/axios.js"
 export default {
     fetchProducts({
         commit
-    }, category_id, limit) {
+    }, {
+        category_id,
+        limit
+    }) {
         return new Promise((resolve, reject) => {
             if (limit == undefined) {
                 limit = 6;
@@ -35,7 +38,10 @@ export default {
                 formData.append(key, product[key]);
             })
             axios.post(`api/category/${product.category_id}/product`, formData).then(response => {
-                dispatch('fetchProducts', product.category_id)
+                dispatch('fetchProducts', {
+                    category_id: product.category_id,
+                    limit: product.limit
+                })
                 resolve(response);
             }).catch(err => {
                 reject(err);

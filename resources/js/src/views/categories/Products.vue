@@ -25,11 +25,11 @@
       <div class="vx-col w-full md:w-2/5 lg:w-1/4">
         <vx-card :title="category.category">
           <ul class="bordered-items">
-            <li
-              v-for="subcategory in category.subcategory"
-              :key="subcategory.id"
-              class="py-2"
-            >{{ subcategory.category }}</li>
+            <li v-for="subcategory in category.subcategory" :key="subcategory.id" class="py-2">
+              <router-link
+                :to="{name:'admin.categories.subcategory.all', params:{id:subcategory.id}}"
+              >{{ subcategory.category }}</router-link>
+            </li>
             <li class="py-2">Todos</li>
           </ul>
         </vx-card>
@@ -69,7 +69,8 @@ export default {
     ...mapActions("category", ["fetchCategory"]),
     addNewData(category_id) {
       this.sidebarData = {
-        category_id: category_id
+        category_id: category_id,
+        limit: 6
       };
       this.toggleDataSidebar(true);
     },

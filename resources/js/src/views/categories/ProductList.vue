@@ -50,7 +50,7 @@ export default {
     ...mapGetters("products", ["getProducts"])
   },
   beforeMount() {
-    this.fetchProducts(this.subcategory.id);
+    this.fetchProducts({ category_id: this.subcategory.id, limit: 6 });
   },
   components: { ProductView }
 };
