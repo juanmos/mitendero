@@ -22,6 +22,7 @@ import company from "./modules/company";
 import companies from "./modules/companies";
 import configuration from "./modules/configuration";
 import contacts from "./modules/contacts";
+import products from "./modules/products";
 import users from "./modules/users";
 
 Vue.use(Vuex)
@@ -39,6 +40,7 @@ export default new Vuex.Store({
         companies,
         configuration,
         contacts,
+        products,
         users
     },
     strict: process.env.NODE_ENV !== 'production'

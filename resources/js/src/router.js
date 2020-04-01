@@ -35,16 +35,17 @@ const router = new Router({
             meta: {
                 redirectIfAuthenticated: true
             },
-            children: [{
-                    path: '/',
-                    name: 'web.init',
-                    meta: {
-                        rule: 'public'
-                    },
-                    beforeEnter() {
-                        location.href = process.env.MIX_APP_URL
-                    }
-                },
+            children: [
+                // {
+                //     path: '/',
+                //     name: 'web.init',
+                //     meta: {
+                //         rule: 'public'
+                //     },
+                //     beforeEnter() {
+                //         location.href = process.env.MIX_APP_URL
+                //     }
+                // },
                 // =============================================================================
                 // PAGES
                 // =============================================================================

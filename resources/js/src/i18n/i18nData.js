@@ -191,6 +191,16 @@ export default {
         locationCompany: 'Ubicación en el mapa',
         Products: 'Productos',
         CompanyProfile: 'Perfil de compañia',
-        Categories: 'Categorias'
+        Categories: 'Categorias',
+        newProduct: 'Nuevo prodcuto',
+        updateProduct: 'Actualizar producto',
+        productName: 'Nombre del producto',
+        presentation: 'Presentación',
+        price: 'Precio',
+        brand: 'Marca',
+        description: 'Descripción',
+        ingredients: 'Ingredientes',
+        nutritionalFacts: 'Datos nutricionales',
+        photos: 'Fotos'
     },
 }

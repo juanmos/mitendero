@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Brand;
 use App\Models\Product;
 
 class ProductTest extends TestCase
@@ -28,11 +29,54 @@ class ProductTest extends TestCase
      */
     public function testProductsList()
     {
-        $this->withoutExceptionHandling();
         factory(Product::class, 10)->create(['category_id'=>17]);
         $response = $this->get('/api/category/17/products');
         $response->assertStatus(200);
         $response->assertJsonStructure(['products']);
         $response->assertJsonCount(6, 'products.data');
+    }
+
+    /** @test */
+    public function testProductSearch()
+    {
+        // assertions
+    }
+    
+
+    /** @test */
+    public function testCreateProductWithBrandId()
+    {
+        $this->withoutExceptionHandling();
+
+        $brand = factory(Brand::class)->create();
+        $response = $this->post("api/category/17/product", array_merge($this->productData(), ['brand_id'=>$brand->id]));
+        $response->assertOk();
+        $response->assertJsonStructure(['product']);
+        $this->assertCount(1, Product::all());
+    }
+
+    public function testCreateProductWithBrandName()
+    {
+        $this->withoutExceptionHandling();
+
+        $brand = factory(Brand::class)->create();
+        $response = $this->post("api/category/17/product", array_merge($this->productData(), ['brand_id'=>0, 'brand_name'=>'Coca-cola']));
+        $response->assertOk();
+        $response->assertJsonStructure(['product']);
+        $this->assertCount(1, Product::all());
+        $this->assertCount(2, Brand::all());
+    }
+
+    
+    private function productData()
+    {
+        return [
+            'category_id'=>17,
+            'name'=>'Sprite',
+            
+            'presentation'=>'2 litros',
+            'price'=>1.8,
+            'description'=>'Sprite de 2 litros no retornable'
+        ];
     }
 }

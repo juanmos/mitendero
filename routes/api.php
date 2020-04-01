@@ -47,9 +47,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //CATEGORY PRODUCTS
     Route::get('/category/{category}/products/{paginate?}', 'ProductController@index')->name('category.products.index');
+    Route::post('/category/{category}/product', 'ProductController@store')->name('category.product.store');
 
     //BRANDS
     Route::get('brands', 'BrandController@index')->name('brand.index');
+    Route::get('brand/search/{term}', 'BrandController@search')->name('brand.search');
     Route::post('brand', 'BrandController@store')->name('brand.store');
     Route::put('brand/{brand}', 'BrandController@update')->name('brand.update');
 });

@@ -1,5 +1,10 @@
 <template>
   <div id="category-page">
+    <product-sidebar
+      :isSidebarActive="addNewDataSidebar"
+      @closeSidebar="toggleDataSidebar"
+      :data="sidebarData"
+    />
     <!-- JUMBOTRON -->
     <div class="category-jumbotron">
       <div class="category-jumbotron-content p-8 rounded-lg mb-base">
@@ -35,6 +40,7 @@
           :key="subcategory.id"
           class="py-2 mb-4"
           :subcategory="subcategory"
+          :openSidebar="addNewData"
         />
       </div>
     </div>
@@ -44,10 +50,14 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import ProductList from "./ProductList.vue";
+import ProductSidebar from "./ProductSidebar.vue";
 export default {
   data() {
     return {
-      productSearchQuery: ""
+      productSearchQuery: "",
+      // Data Sidebar
+      addNewDataSidebar: false,
+      sidebarData: {}
     };
   },
   props: ["id"],
@@ -55,12 +65,21 @@ export default {
     ...mapGetters("category", ["category"])
   },
   methods: {
-    ...mapActions("category", ["fetchCategory"])
+    ...mapActions("category", ["fetchCategory"]),
+    addNewData(category_id) {
+      this.sidebarData = {
+        category_id: category_id
+      };
+      this.toggleDataSidebar(true);
+    },
+    toggleDataSidebar(val = false) {
+      this.addNewDataSidebar = val;
+    }
   },
   created() {
     this.fetchCategory(this.id);
   },
-  components: { ProductList }
+  components: { ProductList, ProductSidebar }
 };
 </script>
 
