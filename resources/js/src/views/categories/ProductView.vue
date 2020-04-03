@@ -1,10 +1,12 @@
 <template>
   <div class="vx-col md:w-1/6 lg:w-1/6 product-view">
-    <img class="grid-view-img px-4" :src="productImage" />
-    <h4>$ {{product.price}}</h4>
-    <h5>{{product.name}}</h5>
-    <p>{{product.description}}</p>
-    <small>{{product.presentation}}</small>
+    <div class="product-data">
+      <img class="grid-view-img px-4" :src="productImage" />
+      <h4>$ {{product.price}}</h4>
+      <h5>{{product.name}}</h5>
+      <p>{{product.description}}</p>
+      <small>{{product.presentation}}</small>
+    </div>
     <div class="demo-alignment product-view-buttons">
       <vs-button
         radius
@@ -84,8 +86,14 @@ h4 {
   text-align: left;
 }
 .product-view {
+  position: relative;
+  .product-data {
+    position: relative;
+    top: 0;
+  }
   .product-view-buttons {
     display: none;
+    //
   }
 }
 .product-view:hover {
