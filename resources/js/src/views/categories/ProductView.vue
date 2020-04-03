@@ -1,13 +1,13 @@
 <template>
   <div class="vx-col md:w-1/6 lg:w-1/6 product-view">
-    <div class="product-data">
+    <div class="product-data" :class="{'no-sale' : noSale}">
       <img class="grid-view-img px-4" :src="productImage" />
       <h4>$ {{product.price}}</h4>
       <h5>{{product.name}}</h5>
       <p>{{product.description}}</p>
       <small>{{product.presentation}}</small>
     </div>
-    <div class="demo-alignment product-view-buttons">
+    <div class="demo-alignment product-view-buttons" v-if="rol == 'SuperAdministrador'">
       <vs-button
         radius
         color="primary"
@@ -36,8 +36,19 @@ export default {
   props: ["product", "editData", "limit"],
   data() {
     return {
-      productImage: ""
+      productImage: "",
+      rol: this.$store.getters["auth/getRol"]
     };
+  },
+  computed: {
+    noSale() {
+      if (this.rol == "SuperAdministrador") {
+        return false;
+      }
+      if (this.rol == "Comercio") {
+        return true;
+      }
+    }
   },
   methods: {
     deleteProduct() {
@@ -84,6 +95,12 @@ export default {
 }
 h4 {
   text-align: left;
+}
+.no-sale {
+  opacity: 0.3;
+}
+.no-sale:hover {
+  opacity: 1;
 }
 .product-view {
   position: relative;

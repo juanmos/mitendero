@@ -16,10 +16,17 @@ export default [{
         i18n: "Dashboard",
     },
     {
-        url: "/company/products",
-        name: "Productos",
+        url: "/company/orders",
+        name: "Pedidos",
         slug: "products",
         icon: "FileTextIcon",
+        i18n: "Products",
+    },
+    {
+        url: "/company/products",
+        name: "Categorias",
+        slug: "products",
+        icon: "CoffeeIcon",
         i18n: "Products",
     },
     {

@@ -20,6 +20,11 @@ export default {
         },
         authStatus(state) {
             return state.status
+        },
+        getPrefix(state) {
+            if (state.rol == "SuperAdministrador") return "admin"
+            else if (state.rol == "Comercio") return "company"
+            else return "user"
         }
     }
 }

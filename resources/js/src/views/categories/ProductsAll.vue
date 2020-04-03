@@ -107,6 +107,9 @@ export default {
       });
       return this.getProducts(this.id);
     },
+    prefix() {
+      return this.$store.getters["auth/getPrefix"];
+    },
     available() {
       return this.products ? this.products.total : 0;
     }

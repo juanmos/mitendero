@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>You are in home.</h4>
+    <h4>Bienvenido muy pronto podras comenzar a recibir pedidos de tus clientes.</h4>
     <!-- {{$acl.get[0]}} -->
   </div>
 </template>

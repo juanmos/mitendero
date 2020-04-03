@@ -40,7 +40,7 @@
             <div class="category-info">
               <p class="font-semibold">
                 <router-link
-                  :to="{name:'admin.categories.subcategory', params:{id:item.id}}"
+                  :to="{name:prefix+'.categories.subcategory', params:{id:item.id}}"
                 >{{ item.category.toUpperCase() }}</router-link>
               </p>
               <span class="activity-desc">{{ item.desc }}</span>
@@ -62,7 +62,7 @@
               class="py-2 text-left"
             >
               <router-link
-                :to="{name:'admin.categories.subcategory', params:{id:subcategory.category_id}}"
+                :to="{name:prefix+'.categories.subcategory', params:{id:subcategory.category_id}}"
               >{{ subcategory.category }}</router-link>
             </li>
           </ul>
@@ -94,6 +94,9 @@ export default {
               .includes(this.categorySearchQuery.toLowerCase())
           )
       );
+    },
+    prefix() {
+      return this.$store.getters["auth/getPrefix"];
     },
     ...mapGetters("category", ["categories"])
   },

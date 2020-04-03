@@ -35,7 +35,7 @@
           <ul class="bordered-items">
             <li v-for="subcategory in category.subcategory" :key="subcategory.id" class="py-2">
               <router-link
-                :to="{name:'admin.categories.subcategory.all', params:{id:subcategory.id}}"
+                :to="{name:prefix+'.categories.subcategory.all', params:{id:subcategory.id}}"
               >{{ subcategory.category }}</router-link>
             </li>
             <li class="py-2">Todos</li>
@@ -71,7 +71,10 @@ export default {
   },
   props: ["id"],
   computed: {
-    ...mapGetters("category", ["category"])
+    ...mapGetters("category", ["category"]),
+    prefix() {
+      return this.$store.getters["auth/getPrefix"];
+    }
   },
   methods: {
     ...mapActions("category", ["fetchCategory"]),

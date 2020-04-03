@@ -138,13 +138,52 @@ const router = new Router({
                         import ('./views/Home.vue')
                 },
                 {
-                    path: 'products',
-                    name: 'company.products',
+                    path: 'pedidos',
+                    name: 'company.orders',
                     meta: {
                         rule: 'Empresa'
                     },
                     component: () =>
                         import ('./views/products/Products.vue')
+                },
+                // {
+                //     path: 'products',
+                //     name: 'company.products',
+                //     meta: {
+                //         rule: 'Empresa'
+                //     },
+                //     component: () =>
+                //         import ('./views/categories/Categories.vue')
+                // },
+                {
+                    path: 'products',
+                    name: '',
+                    meta: {
+                        rule: 'Admin'
+                    },
+                    component: () =>
+                        import ('./views/companies/CompanyMain.vue'),
+                    children: [{
+                            path: '',
+                            name: 'company.products',
+                            component: () =>
+                                import ('./views/categories/Categories.vue')
+                        },
+                        {
+                            path: 'subcategory/:id',
+                            props: true,
+                            name: 'company.categories.subcategory',
+                            component: () =>
+                                import ('./views/categories/Products.vue')
+                        }, {
+                            path: 'subcategory/:id/all',
+                            props: true,
+                            name: 'company.categories.subcategory.all',
+                            component: () =>
+                                import ('./views/categories/ProductsAll.vue')
+                        }
+                    ]
+
                 },
                 {
                     path: 'clients',
