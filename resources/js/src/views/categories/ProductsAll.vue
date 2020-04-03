@@ -102,6 +102,9 @@ export default {
       }
     },
     products() {
+      this.fetchProductBrands(this.id).then(brands => {
+        this.brands = brands;
+      });
       return this.getProducts(this.id);
     },
     available() {
@@ -140,9 +143,6 @@ export default {
   created() {
     this.fetchCategory(this.id);
     this.fetchProducts({ category_id: this.id, limit: 50 });
-    this.fetchProductBrands(this.id).then(brands => {
-      this.brands = brands;
-    });
   },
   components: { ProductView, ProductSidebar }
 };
