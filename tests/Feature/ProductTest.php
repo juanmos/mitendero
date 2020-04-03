@@ -57,7 +57,7 @@ class ProductTest extends TestCase
     public function testCreateProductWithBrandId()
     {
         $brand = factory(Brand::class)->create();
-        $response = $this->post("api/category/17/product", array_merge($this->productData(), ['brand_id'=>$brand->id]));
+        $response = $this->post("api/category/17/product", array_merge($this->productData(), ['brand_id'=>$brand->id,'brand_name'=>$brand->name]));
         $response->assertOk();
         $response->assertJsonStructure(['product']);
         $this->assertCount(1, Product::all());
@@ -65,8 +65,6 @@ class ProductTest extends TestCase
 
     public function testCreateProductWithBrandName()
     {
-        $this->withoutExceptionHandling();
-
         $brand = factory(Brand::class)->create();
         $response = $this->post("api/category/17/product", array_merge($this->productData(), ['brand_id'=>0, 'brand_name'=>'Coca-cola']));
         $response->assertOk();
@@ -96,6 +94,32 @@ class ProductTest extends TestCase
         $this->assertCount(1, Brand::all());
         $this->assertCount(1, ProductPhoto::all());
     }
+
+    /** @test */
+    public function testProductUpdate()
+    {
+        $product = factory(Product::class)->create(['category_id'=>17]);
+        $response = $this->put("api/category/17/product/{$product->id}", $this->productData());
+        $response->assertOk();
+        $this->assertEquals('Sprite', $product->fresh()->name);
+        $this->assertCount(1, Product::all());
+    }
+    
+    public function testDeleteProductPhoto()
+    {
+    }
+
+    /** @test */
+    public function testDeleteProduct()
+    {
+        factory(Product::class, 10)->create(['category_id'=>17]);
+        $product =factory(Product::class)->create(['category_id'=>17]);
+
+        $response = $this->delete("/api/category/17/product/{$product->id}");
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['deleted']);
+        $this->assertCount(10, Product::all());
+    }
     
     
     private function productData()
@@ -103,7 +127,8 @@ class ProductTest extends TestCase
         return [
             'category_id'=>17,
             'name'=>'Sprite',
-            
+            'brand_id'=>1,
+            'brand_name'=>'Vivant',
             'presentation'=>'2 litros',
             'price'=>1.8,
             'description'=>'Sprite de 2 litros no retornable'

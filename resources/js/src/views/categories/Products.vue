@@ -8,6 +8,14 @@
     <!-- JUMBOTRON -->
     <div class="category-jumbotron">
       <div class="category-jumbotron-content p-8 rounded-lg mb-base">
+        <vs-button
+          radius
+          color="primary"
+          type="border"
+          icon-pack="feather"
+          icon="icon-arrow-left"
+          @click="handleBack"
+        ></vs-button>
         <h1 class="mb-1">Buscar producto en {{category.category}}</h1>
 
         <vs-input
@@ -33,7 +41,6 @@
             <li class="py-2">Todos</li>
           </ul>
         </vx-card>
-        <vs-button type="border" text-color="#7367F0" @click="handleBack">Volver</vs-button>
       </div>
       <div class="vx-col w-full md:w-3/5 lg:w-3/4">
         <product-list
@@ -42,6 +49,7 @@
           class="py-2 mb-4"
           :subcategory="subcategory"
           :openSidebar="addNewData"
+          :editData="editData"
         />
       </div>
     </div>
@@ -72,6 +80,10 @@ export default {
         category_id: category_id,
         limit: 6
       };
+      this.toggleDataSidebar(true);
+    },
+    editData(data) {
+      this.sidebarData = data;
       this.toggleDataSidebar(true);
     },
     toggleDataSidebar(val = false) {

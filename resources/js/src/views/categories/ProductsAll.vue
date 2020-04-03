@@ -8,6 +8,15 @@
     <!-- JUMBOTRON -->
     <div class="category-jumbotron">
       <div class="category-jumbotron-content p-8 rounded-lg mb-base">
+        <vs-button
+          radius
+          color="primary"
+          type="border"
+          icon-pack="feather"
+          icon="icon-arrow-left"
+          @click="handleBack"
+        ></vs-button>
+
         <h1 class="mb-1">Buscar producto en {{category.category}}</h1>
 
         <vs-input
@@ -26,29 +35,36 @@
         <vx-card title="Marcas">
           <ul class="bordered-items">
             <li v-for="brand in brands" :key="brand.id" class="py-2">
-              <vs-checkbox>{{ brand.name }}</vs-checkbox>
+              <vs-checkbox @click="filter(brand.id)">{{ brand.name }}</vs-checkbox>
             </li>
           </ul>
         </vx-card>
-        <vs-button type="border" text-color="#7367F0" @click="handleBack">Volver</vs-button>
       </div>
       <div class="vx-col w-full md:w-3/5 lg:w-3/4">
         <div v-if="products">
           <vx-card :title="category.category" :subtitle="available + ' items disponibles'">
             <div slot="actions">
               <div class="vx-card__action-buttons">
-                <vs-button
-                  radius
-                  color="primary"
-                  type="filled"
-                  icon-pack="feather"
-                  icon="icon-plus"
-                  @click="addNewData(category.id)"
-                ></vs-button>
+                <div class="vx-card__action-buttons">
+                  <vs-button
+                    radius
+                    color="primary"
+                    type="filled"
+                    icon-pack="feather"
+                    icon="icon-plus"
+                    @click="addNewData(category.id)"
+                  ></vs-button>
+                </div>
               </div>
             </div>
             <div class="vx-row">
-              <product-view v-for="product in products.data" :key="product.id" :product="product"></product-view>
+              <product-view
+                v-for="product in filteredProducts"
+                :key="product.id"
+                :product="product"
+                :editData="editData"
+                limit="50"
+              ></product-view>
             </div>
           </vx-card>
         </div>
@@ -68,13 +84,23 @@ export default {
       // Data Sidebar
       addNewDataSidebar: false,
       sidebarData: {},
-      brands: []
+      brands: [],
+      filterBy: []
     };
   },
   props: ["id"],
   computed: {
     ...mapGetters("category", ["category"]),
     ...mapGetters("products", ["getProducts"]),
+    filteredProducts() {
+      if (this.filterBy.length > 0) {
+        return this.products.data.filter(item =>
+          this.filterBy.includes(item.brand_id)
+        );
+      } else {
+        return this.products.data;
+      }
+    },
     products() {
       return this.getProducts(this.id);
     },
@@ -92,11 +118,23 @@ export default {
       };
       this.toggleDataSidebar(true);
     },
+    editData(data) {
+      this.sidebarData = data;
+      this.sidebarData.limit = 50;
+      this.toggleDataSidebar(true);
+    },
     toggleDataSidebar(val = false) {
       this.addNewDataSidebar = val;
     },
     handleBack(fallback) {
       this.$router.back();
+    },
+    filter(brand_id) {
+      if (this.filterBy.includes(brand_id)) {
+        this.filterBy.splice(this.filterBy.indexOf(brand_id), 1);
+      } else {
+        this.filterBy.push(brand_id);
+      }
     }
   },
   created() {

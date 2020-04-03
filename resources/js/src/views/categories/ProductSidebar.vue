@@ -66,7 +66,7 @@
             @select="onSuggestSelect"
           >
             <div class="g">
-              <input type="text" />
+              <input type="text" v-model="brand_name" />
             </div>
 
             <div
@@ -122,20 +122,32 @@
           class="text-danger text-sm"
           v-show="errors.has('ingredients')"
         >{{ errors.first('ingredients') }}</span>
-        <vs-input
-          type="file"
-          :label="$t('photos')"
-          class="mt-5 w-full"
-          name="photo"
-          @change="onFileChanged"
-        />
-        <vs-input
-          type="file"
-          :label="$t('nutritionalFacts')"
-          class="mt-5 w-full"
-          name="photo"
-          @change="onFileNutsChanged"
-        />
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/2 w-full mb-2">
+            <vs-input
+              type="file"
+              :label="$t('photos')"
+              class="mt-5 w-full"
+              name="photo"
+              @change="onFileChanged"
+            />
+            <div class="preview">
+              <img v-if="urlPhoto" :src="urlPhoto" />
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/2 w-full mb-2">
+            <vs-input
+              type="file"
+              :label="$t('nutritionalFacts')"
+              class="mt-5 w-full"
+              name="photo"
+              @change="onFileNutsChanged"
+            />
+            <div class="preview">
+              <img v-if="urlNut" :src="urlNut" />
+            </div>
+          </div>
+        </div>
       </div>
     </VuePerfectScrollbar>
 
@@ -168,9 +180,12 @@ export default {
   watch: {
     isSidebarActive(val) {
       if (!val) return;
-      if (Object.entries(this.data).length === 0) {
+      if (this.isNew()) {
         this.initValues();
         this.$validator.reset();
+        let { category_id, limit } = JSON.parse(JSON.stringify(this.data));
+        this.category_id = category_id;
+        this.limit = limit;
       } else {
         let {
           name,
@@ -182,6 +197,8 @@ export default {
           ingredients,
           category_id,
           presentation,
+          nutritionalFacts,
+          photos,
           limit
         } = JSON.parse(JSON.stringify(this.data));
         this.dataId = id;
@@ -189,12 +206,20 @@ export default {
         this.price = price;
         this.brand = brand;
         this.brand_id = brand_id;
-        this.description = description;
-        this.ingredients = ingredients;
+        this.description = description || "";
+        this.ingredients = ingredients || "";
         this.category_id = category_id;
         this.presentation = presentation;
+        if (photos != undefined) {
+          this.urlPhoto = photos.length > 0 ? photos[0].photo : null;
+        }
+        if (brand != undefined) {
+          this.brand_name = brand.name;
+        }
         this.limit = limit;
+        this.urlNut = nutritionalFacts;
         this.initValues();
+        console.log(ingredients);
       }
       // Object.entries(this.data).length === 0 ? this.initValues() : { this.dataId, this.dataName, this.dataCategory, this.dataOrder_status, this.dataPrice } = JSON.parse(JSON.stringify(this.data))
     }
@@ -205,12 +230,15 @@ export default {
       name: "",
       price: "",
       brand: "",
+      brand_name: "",
       description: "",
       ingredients: "",
       brand_id: 0,
       category_id: "",
       presentation: "",
       loading: false,
+      urlPhoto: null,
+      urlNut: null,
       settings: {
         // perfectscrollbar settings
         maxScrollbarLength: 60,
@@ -218,7 +246,8 @@ export default {
         url: "http://tiendaweb.test/api/product/photo"
       },
       selectedFile: null,
-      nutritionalFile: null
+      nutritionalFile: null,
+      limit: 6
     };
   },
   computed: {
@@ -257,9 +286,12 @@ export default {
       this.ingredients = "";
       this.price = "";
       this.brand_id = 0;
+      this.brand_name = "";
       this.presentation = "";
       this.selectedFile = null;
       this.nutritionalFile = null;
+      this.urlPhoto = null;
+      this.urlNut = null;
     },
     submitData() {
       this.$validator.validateAll().then(result => {
@@ -272,7 +304,7 @@ export default {
             ingredients: this.ingredients,
             presentation: this.presentation,
             description: this.description,
-            brand_name: this.brand,
+            brand_name: this.brand_name,
             brand_id: this.brand_id,
             limit: this.limit
           };
@@ -283,12 +315,13 @@ export default {
             obj.nutritionalFacts = this.nutritionalFile;
           }
 
-          if (this.dataId !== null && this.dataId >= 0) {
+          if (this.dataId !== null && this.dataId > 0) {
             this.$store
-              .dispatch("users/updateUser", obj)
+              .dispatch("products/updateProduct", obj)
               .then(result => {
                 this.$emit("closeSidebar");
                 this.initValues();
+                this.$validator.reset();
               })
               .catch(err => {
                 console.error(err);
@@ -300,6 +333,7 @@ export default {
               .then(result => {
                 this.$emit("closeSidebar");
                 this.initValues();
+                this.$validator.reset();
               })
               .catch(err => {
                 console.error(err);
@@ -324,12 +358,15 @@ export default {
     },
     onSuggestSelect(suggest) {
       this.brand_id = suggest.id;
+      this.brand_name = suggest.name;
     },
     onFileChanged(event) {
       this.selectedFile = event.target.files[0];
+      this.urlPhoto = URL.createObjectURL(this.selectedFile);
     },
     onFileNutsChanged() {
       this.nutritionalFile = event.target.files[0];
+      this.urlNut = URL.createObjectURL(this.nutritionalFile);
     },
     isNew() {
       let obj = Object.assign({}, this.data);
@@ -379,5 +416,15 @@ export default {
 .scroll-area--data-list-add-new {
   // height: calc(var(--vh, 1vh) * 100 - 4.3rem);
   height: calc(var(--vh, 1vh) * 100 - 16px - 45px - 82px);
+}
+.preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview img {
+  max-width: 100%;
+  max-height: 500px;
 }
 </style>

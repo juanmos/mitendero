@@ -48,6 +48,46 @@ export default {
             })
         })
     },
+    updateProduct({
+        commit,
+        dispatch
+    }, product) {
+        return new Promise((resolve, reject) => {
+            var formData = new FormData();
+            formData.append("_method", "PUT");
+            Object.keys(product).forEach(key => {
+                formData.append(key, product[key]);
+            })
+            axios.post(`api/category/${product.category_id}/product/${product.id}`, formData).then(response => {
+                dispatch('fetchProducts', {
+                    category_id: product.category_id,
+                    limit: product.limit
+                })
+                resolve(response);
+            }).catch(err => {
+                reject(err);
+            })
+        })
+    },
+    removeProduct({
+        commit,
+        dispatch
+    }, {
+        product,
+        limit
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.delete(`api/category/${product.category_id}/product/${product.id}`).then(response => {
+                dispatch('fetchProducts', {
+                    category_id: product.category_id,
+                    limit: limit
+                })
+                resolve(response);
+            }).catch(err => {
+                reject(err);
+            })
+        })
+    },
     findBrand({
         commit
     }, brand) {

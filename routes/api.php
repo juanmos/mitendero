@@ -48,6 +48,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     //CATEGORY PRODUCTS
     Route::get('/category/{category}/products/{paginate?}', 'ProductController@index')->name('category.products.index');
     Route::post('/category/{category}/product', 'ProductController@store')->name('category.product.store');
+    Route::put('/category/{category}/product/{product}', 'ProductController@update')->name('category.product.update');
+    Route::delete('/category/{category}/product/{product}', 'ProductController@destroy')->name('category.product.delete');
+
+
     Route::post('product/photo', 'ProductController@uploadPhoto')->name('product.upload');
     Route::get('/category/{category}/brands', 'ProductController@brands')->name('category.products.brands.list');
 

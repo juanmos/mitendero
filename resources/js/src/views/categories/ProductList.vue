@@ -21,7 +21,13 @@
       </div>
     </div>
     <div class="vx-row" v-if="products">
-      <product-view v-for="product in products.data" :key="product.id" :product="product"></product-view>
+      <product-view
+        v-for="product in products.data"
+        :key="product.id"
+        :product="product"
+        :editData="editData"
+        limit="6"
+      ></product-view>
     </div>
   </vx-card>
 </template>
@@ -30,7 +36,7 @@
 import { mapActions, mapGetters } from "vuex";
 import ProductView from "./ProductView.vue";
 export default {
-  props: ["subcategory", "openSidebar"],
+  props: ["subcategory", "openSidebar", "editData"],
   methods: {
     ...mapActions("products", ["fetchProducts"]),
     openAll(subcategory) {

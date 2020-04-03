@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductPhoto;
 use Illuminate\Http\Request;
+use Storage;
 
 class ProductController extends Controller
 {
@@ -29,7 +30,7 @@ class ProductController extends Controller
     {
         $brands = Brand::whereHas('products', function ($query) use ($category) {
             $query->where('category_id', $category->id);
-        })->get();
+        })->orderBy('name')->get();
         return response()->json(compact('brands'));
     }
 
@@ -118,9 +119,52 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Category $category, Product $product)
     {
-        //
+        if ($category == null || $product==null) {
+            abort(404);
+        }
+        $request->validate([
+            'name'=>'required',
+            'brand_id'=>'required',
+            'presentation'=>'required',
+            'brand_name'=>'required',
+            'price'=>'required',
+        ]);
+
+        $data=$request->except(['photo','nutritionalFacts']);
+        $brand = Brand::find($request->get('brand_id'));
+        if ($brand==null) {
+            $brand = Brand::create(['name'=>$request->get('brand_name')]);
+        }
+        $data['brand_id']=$brand->id;
+        $product->update($data);
+
+        if ($request->has('photo')) {
+            $path = $request->file('photo')->store('public/products');
+            if ($product->photos->count()>0) {
+                foreach ($product->photos as $photo) {
+                    Storage::delete($photo->photo);
+                    $photo->delete();
+                }
+            }
+            // $default = ($product->photos->count()>0)?0:1;
+            $productPhoto= $product->photos()->create([
+                'photo'=>$path,
+                'default'=>1
+            ]);
+        }
+        if ($request->has('nutritionalFacts')) {
+            if ($product->nutritional_facts!=null) {
+                Storage::delete($product->nutritional_facts);
+            }
+            $path = $request->file('nutritionalFacts')->store('public/nutrition');
+            $product->nutritional_facts=$path;
+            $product->save();
+        }
+
+
+        return response()->json(compact('product'));
     }
 
     /**
@@ -129,8 +173,20 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Category $category, Product $product)
     {
-        //
+        if ($product->photos->count()>0) {
+            foreach ($product->photos as $photo) {
+                Storage::delete($photo->photo);
+                $photo->delete();
+            }
+        }
+
+        if ($product->nutritional_facts!=null) {
+            Storage::delete($product->nutritional_facts);
+        }
+
+        $product->delete();
+        return response()->json(['deleted'=>true]);
     }
 }
