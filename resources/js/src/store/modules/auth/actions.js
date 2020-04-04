@@ -67,10 +67,11 @@ export default {
         dispatch,
         state
     }) {
-        axios.get('api/auth/me').then(({
-            data
-        }) => {
-            return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
+            axios.get('api/auth/me').then(({
+                data
+            }) => {
+
                 data.user.role = data.role;
                 dispatch('updateUserInfo', data.user, {
                     root: true
@@ -93,9 +94,7 @@ export default {
                         }
                     }
                 }
-
-
-                resolve();
+                resolve(data);
             })
         });
     },

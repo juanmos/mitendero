@@ -263,12 +263,13 @@ export default {
       center: { lat: -2.8969556, lng: -79.0125272 },
       markers: [],
       coordinates: { lat: -2.8969556, lng: -79.0125272 },
-      userData: null
+      userData: {},
+      company: {}
     };
   },
   created() {
-    this.company = this.$store.state.company.company;
     this.config = this.$store.state.configuration.configuration;
+
     this.$getLocation({
       enableHighAccuracy: true //defaults to false
     }).then(coordinates => {
@@ -280,14 +281,11 @@ export default {
       });
     });
   },
-  beforeCreate() {
-    this.userData = Object.assign({}, { ...mapGetters(["user"]) });
-  },
-  computed: {
-    // userData() {
-    //   return Object.assign({}, ...mapGetters(["userData"]));
-    // },
-    ...mapGetters("company", ["company"])
+  mounted() {
+    this.$store.dispatch("auth/me").then(response => {
+      this.userData = response.user;
+      this.company = response.user.company;
+    });
   },
   methods: {
     ...mapActions(["updateProfile"]),
@@ -296,6 +294,7 @@ export default {
       "saveCompanyLocation",
       "changeCompanyStatus"
     ]),
+    ...mapActions("auth", ["me"]),
     ...mapActions("configuration", ["saveConfigData"]),
     validateStep1() {
       return new Promise((resolve, reject) => {

@@ -26,7 +26,7 @@ export default {
   },
   beforeCreate() {
     this.$store.dispatch("auth/tryAutoLogin");
-    this.getRol();
+    // this.getRol();
   }
 };
 </script>
