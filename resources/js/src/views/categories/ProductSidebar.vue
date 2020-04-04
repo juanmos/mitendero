@@ -322,6 +322,10 @@ export default {
                 this.$emit("closeSidebar");
                 this.initValues();
                 this.$validator.reset();
+                this.$vs.notify({
+                  color: "success",
+                  title: this.$t("productUpdated")
+                });
               })
               .catch(err => {
                 console.error(err);
@@ -334,6 +338,10 @@ export default {
                 this.$emit("closeSidebar");
                 this.initValues();
                 this.$validator.reset();
+                this.$vs.notify({
+                  color: "success",
+                  title: this.$t("productAdded")
+                });
               })
               .catch(err => {
                 console.error(err);

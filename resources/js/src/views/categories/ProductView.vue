@@ -1,13 +1,13 @@
 <template>
-  <div class="vx-col md:w-1/6 lg:w-1/6 product-view">
-    <div class="product-data" :class="{'no-sale' : noSale}">
+  <div class="vx-col md:w-1/6 lg:w-1/6 product-view" :class="{'no-sale' : noSale}">
+    <div class="product-data">
       <img class="grid-view-img px-4" :src="productImage" />
       <h4>$ {{product.price}}</h4>
       <h5>{{product.name}}</h5>
       <p>{{product.description}}</p>
       <small>{{product.presentation}}</small>
     </div>
-    <div class="demo-alignment product-view-buttons" v-if="rol == 'SuperAdministrador'">
+    <div class="demo-alignment product-view-buttons" v-if="!noSale">
       <vs-button
         radius
         color="primary"
@@ -28,6 +28,9 @@
         @click="deleteProduct()"
       ></vs-button>
     </div>
+    <div class="addProduct" v-if="rol == 'Comercio' && product.company_count == 0">
+      <vs-button color="primary" type="filled" icon="add" @click="addProductToCompany">Agregar</vs-button>
+    </div>
   </div>
 </template>
 
@@ -46,6 +49,9 @@ export default {
         return false;
       }
       if (this.rol == "Comercio") {
+        if (this.product.company_count > 0) {
+          return false;
+        }
         return true;
       }
     }
@@ -56,27 +62,58 @@ export default {
         type: "confirm",
         color: "danger",
         title: this.$t("confirmDeleteTitle"),
-        text: this.$t("confirmDeleteText"),
+        text: this.$t("confirmDeleteProductText"),
         accept: this.acceptAlert,
         acceptText: this.$t("delete")
       });
     },
     acceptAlert() {
+      if (this.rol == "SuperAdministrador") {
+        this.$store
+          .dispatch("products/removeProduct", {
+            product: this.product,
+            limit: this.limit
+          })
+          .then(err => {
+            this.$vs.notify({
+              color: "danger",
+              title: this.$t("productDeletedTitle"),
+              text: this.$t("productDeletedText")
+            });
+          });
+      } else {
+        this.$store
+          .dispatch("products/removeProductCompany", {
+            product: this.product,
+            limit: this.limit
+          })
+          .then(err => {
+            this.$vs.notify({
+              color: "danger",
+              title: this.$t("productDeletedTitle"),
+              text: this.$t("productDeletedText")
+            });
+          });
+      }
+    },
+    editProduct() {
+      if (this.rol == "SuperAdministrador") {
+        this.editData(this.product);
+      }
+    },
+    addProductToCompany() {
+      console.log("click");
       this.$store
-        .dispatch("products/removeProduct", {
+        .dispatch("products/addToCompany", {
           product: this.product,
           limit: this.limit
         })
-        .catch(err => {
+        .then(() => {
           this.$vs.notify({
-            color: "danger",
-            title: this.$t("productDeletedTitle"),
-            text: this.$t("productDeletedText")
+            color: "success",
+            title: this.$t("productAdded")
           });
         });
-    },
-    editProduct() {
-      this.editData(this.product);
     }
   },
   created() {
@@ -111,6 +148,17 @@ h4 {
   .product-view-buttons {
     display: none;
     //
+  }
+  .addProduct {
+    position: absolute;
+    top: 0;
+    z-index: 20;
+    margin-top: 5rem;
+    margin-left: 2rem;
+
+    .con-vs-chip {
+      cursor: pointer;
+    }
   }
 }
 .product-view:hover {

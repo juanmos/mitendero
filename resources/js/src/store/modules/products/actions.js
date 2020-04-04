@@ -28,8 +28,23 @@ export default {
             })
         })
     },
+    addToCompany({
+        dispatch
+    }, {
+        product,
+        limit
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.post(`api/my/product/${product.id}`).then(response => {
+                dispatch('fetchProducts', {
+                    category_id: product.category_id,
+                    limit: limit
+                })
+                resolve();
+            })
+        })
+    },
     addProduct({
-        commit,
         dispatch
     }, product) {
         return new Promise((resolve, reject) => {
@@ -78,6 +93,25 @@ export default {
     }) {
         return new Promise((resolve, reject) => {
             axios.delete(`api/category/${product.category_id}/product/${product.id}`).then(response => {
+                dispatch('fetchProducts', {
+                    category_id: product.category_id,
+                    limit: limit
+                })
+                resolve(response);
+            }).catch(err => {
+                reject(err);
+            })
+        })
+    },
+    removeProductCompany({
+        commit,
+        dispatch
+    }, {
+        product,
+        limit
+    }) {
+        return new Promise((resolve, reject) => {
+            axios.delete(`api/my/product/${product.id}`).then(response => {
                 dispatch('fetchProducts', {
                     category_id: product.category_id,
                     limit: limit

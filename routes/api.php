@@ -31,8 +31,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     //COMPANY LOCATIONS
     Route::post('/company/{company}/location', 'CompanyLocationController@store')->name('company.location.store');
 
-
-
     //USERS
     Route::get('/users', 'UserController@index')->name('user.index');
     Route::get('/users/{user}', 'UserController@show')->name('user.show');
@@ -60,4 +58,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('brand/search/{term}', 'BrandController@search')->name('brand.search');
     Route::post('brand', 'BrandController@store')->name('brand.store');
     Route::put('brand/{brand}', 'BrandController@update')->name('brand.update');
+
+    
+    Route::group(['prefix' => 'my'], function () {
+        Route::get('product/{product}', 'Company\ProductController@getProductInCompany')->name('my.company.product.getter');
+        Route::post('product/{product}', 'Company\ProductController@setProductInCompany')->name('my.company.product.setter');
+        Route::delete('product/{product}', 'Company\ProductController@removeProductInCompany')->name('my.company.product.remove');
+    });
 });

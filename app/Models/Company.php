@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\CompanyLocation;
 use App\Models\CompanyStatus;
 use App\Models\CompanyType;
+use App\Models\CompanyProduct;
 use App\Models\Configuration;
 use App\Models\User;
+use App\Models\Product;
 
 class Company extends Model
 {
@@ -47,5 +49,12 @@ class Company extends Model
     public function configuration()
     {
         return $this->hasOne(Configuration::class, 'company_id');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)
+                ->using(CompanyProduct::class)
+                ->withPivot('price', 'quantity');
     }
 }

@@ -202,6 +202,11 @@ export default {
         ingredients: 'Ingredientes',
         nutritionalFacts: 'Datos nutricionales',
         photos: 'Fotos',
-        uploadFile: 'Subir foto'
+        uploadFile: 'Subir foto',
+        confirmDeleteProductText: 'Vas a eliminar un producto, estas seguro?',
+        productDeletedTitle: 'Producto eliminado',
+        productDeletedText: 'El producto ha sido eliminado con exito',
+        productAdded: 'Producto agregado',
+        productUpdated: 'Producto actualizado'
     },
 }

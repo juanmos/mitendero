@@ -19,9 +19,7 @@ class ProductController extends Controller
     public function index(Category $category, $paginate = 6)
     {
         $products = Product::categoryFilter($category->id)
-                ->with(['photos'=> function ($query) {
-                    $query->default();
-                }])
+                ->mixins()
                 ->paginate($paginate);
         return response()->json(compact('products'));
     }
