@@ -21,9 +21,14 @@ class ProductController extends Controller
         return $this->getProductInCompany($product);
     }
 
+    public function updateProductPrice(Request $request, Product  $product)
+    {
+        $product->company()->sync([auth()->user()->company_id=>['price'=>$request->price]]);
+        return response()->json();
+    }
+
     public function removeProductInCompany(Product $product)
     {
         $product->company()->detach(auth()->user()->company_id);
-        return response()->json();
     }
 }

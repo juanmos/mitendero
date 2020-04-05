@@ -2,7 +2,7 @@
   <div class="vx-col md:w-1/6 lg:w-1/6 product-view" :class="{'no-sale' : noSale}">
     <div class="product-data">
       <img class="grid-view-img px-4" :src="productImage" />
-      <h4>$ {{product.price}}</h4>
+      <h4>$ {{price}}</h4>
       <h5>{{product.name}}</h5>
       <p>{{product.description}}</p>
       <small>{{product.presentation}}</small>
@@ -54,6 +54,26 @@ export default {
         }
         return true;
       }
+    },
+    price() {
+      if (this.rol == "SuperAdministrador") {
+        return this.product.price;
+      } else {
+        this.product.priceSuggested = this.product.price;
+        if (
+          this.product.company_count > 0 &&
+          this.product.company[0].pivot.price != null
+        ) {
+          return this.product.company[0].pivot.price;
+        }
+        return this.product.price;
+      }
+    }
+  },
+  watch: {
+    price: function(value) {
+      console.log("price", value);
+      this.product.priceSuggested = value;
     }
   },
   methods: {
@@ -98,6 +118,8 @@ export default {
     },
     editProduct() {
       if (this.rol == "SuperAdministrador") {
+        this.editData(this.product);
+      } else {
         this.editData(this.product);
       }
     },

@@ -34,6 +34,7 @@
           class="mt-5 w-full"
           name="productName"
           v-validate="'required'"
+          :disabled="!(this.rol == 'SuperAdministrador')"
         />
         <span
           class="text-danger text-sm"
@@ -59,6 +60,7 @@
             }"
             mode="input"
             :nullable-select="true"
+            :disabled="!(this.rol == 'SuperAdministrador')"
             ref="suggestComponent"
             placeholder="Search information..."
             value-attribute="id"
@@ -66,7 +68,12 @@
             @select="onSuggestSelect"
           >
             <div class="g">
-              <input type="text" v-model="brand_name" />
+              <input
+                :disabled="!(rol == 'SuperAdministrador')"
+                type="text"
+                v-model="brand_name"
+                :class="{'vs-inputx vs-input--input normal hasValue':!(rol == 'SuperAdministrador')}"
+              />
             </div>
 
             <div
@@ -79,49 +86,69 @@
             </div>
           </vue-simple-suggest>
         </div>
-
-        <vs-input
-          :label="$t('price')"
-          v-model="price"
-          class="mt-5 w-full"
-          name="price"
-          v-validate="'required'"
-        />
+        <div class="price-layout">
+          <vs-input
+            :label="$t('price')"
+            v-model="price"
+            class="mt-5 w-full"
+            name="price"
+            v-validate="'required'"
+          />
+          <vs-button
+            v-if="(rol != 'SuperAdministrador' && showDeletePrice) "
+            class="deletePrice"
+            color="danger"
+            type="flat"
+            icon-pack="feather"
+            icon="icon-x"
+            @click="deletePriceCompany"
+          >Eliminar</vs-button>
+        </div>
         <span class="text-danger text-sm" v-show="errors.has('price')">{{ errors.first('price') }}</span>
-
+        <vs-input
+          :label="$t('priceSuggested')"
+          v-model="priceSuggested"
+          class="mt-5 w-full"
+          name="priceSuggested"
+          v-validate="'required'"
+          :disabled="!(rol == 'SuperAdministrador')"
+          v-if="!(rol == 'SuperAdministrador')"
+        />
         <vs-input
           :label="$t('presentation')"
           v-model="presentation"
           class="mt-5 w-full"
           name="presentation"
           v-validate="'required'"
+          :disabled="!(rol == 'SuperAdministrador')"
         />
         <span
           class="text-danger text-sm"
           v-show="errors.has('presentation')"
         >{{ errors.first('presentation') }}</span>
+        <div v-if="(rol == 'SuperAdministrador')">
+          <vs-input
+            :label="$t('description')"
+            v-model="description"
+            class="mt-5 w-full"
+            name="description"
+          />
+          <span
+            class="text-danger text-sm"
+            v-show="errors.has('description')"
+          >{{ errors.first('description') }}</span>
 
-        <vs-input
-          :label="$t('description')"
-          v-model="description"
-          class="mt-5 w-full"
-          name="description"
-        />
-        <span
-          class="text-danger text-sm"
-          v-show="errors.has('description')"
-        >{{ errors.first('description') }}</span>
-
-        <vs-input
-          :label="$t('ingredients')"
-          v-model="ingredients"
-          class="mt-5 w-full"
-          name="ingredients"
-        />
-        <span
-          class="text-danger text-sm"
-          v-show="errors.has('ingredients')"
-        >{{ errors.first('ingredients') }}</span>
+          <vs-input
+            :label="$t('ingredients')"
+            v-model="ingredients"
+            class="mt-5 w-full"
+            name="ingredients"
+          />
+          <span
+            class="text-danger text-sm"
+            v-show="errors.has('ingredients')"
+          >{{ errors.first('ingredients') }}</span>
+        </div>
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <vs-input
@@ -130,12 +157,13 @@
               class="mt-5 w-full"
               name="photo"
               @change="onFileChanged"
+              v-if="(rol == 'SuperAdministrador')"
             />
             <div class="preview">
               <img v-if="urlPhoto" :src="urlPhoto" />
             </div>
           </div>
-          <div class="vx-col sm:w-1/2 w-full mb-2">
+          <div class="vx-col sm:w-1/2 w-full mb-2" v-if="(rol == 'SuperAdministrador')">
             <vs-input
               type="file"
               :label="$t('nutritionalFacts')"
@@ -191,6 +219,7 @@ export default {
           name,
           id,
           price,
+          priceSuggested,
           brand,
           brand_id,
           description,
@@ -199,11 +228,13 @@ export default {
           presentation,
           nutritionalFacts,
           photos,
-          limit
+          limit,
+          company
         } = JSON.parse(JSON.stringify(this.data));
+
         this.dataId = id;
         this.name = name;
-        this.price = price;
+        this.priceSuggested = priceSuggested;
         this.brand = brand;
         this.brand_id = brand_id;
         this.description = description || "";
@@ -219,7 +250,14 @@ export default {
         this.limit = limit;
         this.urlNut = nutritionalFacts;
         this.initValues();
-        console.log(ingredients);
+        if (this.rol == "SuperAdministrador") {
+          this.price = price;
+        } else {
+          if (company.length > 0 && company[0].pivot.price != null) {
+            this.showDeletePrice = true;
+            this.price = company[0].pivot.price;
+          } else this.price = price;
+        }
       }
       // Object.entries(this.data).length === 0 ? this.initValues() : { this.dataId, this.dataName, this.dataCategory, this.dataOrder_status, this.dataPrice } = JSON.parse(JSON.stringify(this.data))
     }
@@ -229,6 +267,7 @@ export default {
       dataId: null,
       name: "",
       price: "",
+      priceSuggested: "",
       brand: "",
       brand_name: "",
       description: "",
@@ -247,7 +286,9 @@ export default {
       },
       selectedFile: null,
       nutritionalFile: null,
-      limit: 6
+      showDeletePrice: false,
+      limit: 6,
+      rol: this.$store.getters["auth/getRol"]
     };
   },
   computed: {
@@ -271,6 +312,17 @@ export default {
         this.presentation &&
         this.name
       );
+    },
+    fieldVisible() {
+      if (this.rol == "SuperAdministrador") {
+        return true;
+      }
+      if (this.rol == "Comercio") {
+        if (this.product.company_count > 0) {
+          return false;
+        }
+        return true;
+      }
     }
 
     // ...mapState("users", ["roles"])
@@ -316,20 +368,37 @@ export default {
           }
 
           if (this.dataId !== null && this.dataId > 0) {
-            this.$store
-              .dispatch("products/updateProduct", obj)
-              .then(result => {
-                this.$emit("closeSidebar");
-                this.initValues();
-                this.$validator.reset();
-                this.$vs.notify({
-                  color: "success",
-                  title: this.$t("productUpdated")
+            if (this.rol == "SuperAdministrador") {
+              this.$store
+                .dispatch("products/updateProduct", obj)
+                .then(result => {
+                  this.$emit("closeSidebar");
+                  this.initValues();
+                  this.$validator.reset();
+                  this.$vs.notify({
+                    color: "success",
+                    title: this.$t("productUpdated")
+                  });
+                })
+                .catch(err => {
+                  console.error(err);
                 });
-              })
-              .catch(err => {
-                console.error(err);
-              });
+            } else {
+              this.$store
+                .dispatch("products/updateCompanyProductPrice", obj)
+                .then(result => {
+                  this.$emit("closeSidebar");
+                  this.initValues();
+                  this.$validator.reset();
+                  this.$vs.notify({
+                    color: "success",
+                    title: this.$t("productUpdated")
+                  });
+                })
+                .catch(err => {
+                  console.error(err);
+                });
+            }
           } else {
             delete obj.id;
             this.$store
@@ -381,6 +450,26 @@ export default {
       delete obj.category_id;
       delete obj.limit;
       return Object.entries(obj).length === 0;
+    },
+    deletePriceCompany() {
+      this.$store
+        .dispatch("products/removePriceProductCompany", {
+          category_id: this.category_id,
+          id: this.dataId,
+          limit: this.limit
+        })
+        .then(result => {
+          this.$emit("closeSidebar");
+          this.initValues();
+          this.$validator.reset();
+          this.$vs.notify({
+            color: "success",
+            title: this.$t("productAdded")
+          });
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   },
   components: {
@@ -434,5 +523,14 @@ export default {
 .preview img {
   max-width: 100%;
   max-height: 500px;
+}
+.price-layout {
+  position: relative;
+  .deletePrice {
+    position: relative;
+    top: -39px;
+    z-index: 232;
+    float: right;
+  }
 }
 </style>

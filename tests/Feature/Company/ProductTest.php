@@ -63,4 +63,33 @@ class ProductTest extends TestCase
         $response->assertOk();
         $this->assertCount(0, $product->fresh()->company()->get());
     }
+
+    /** @test */
+    public function testUpdateProductPriceInCompany()
+    {
+        $product = factory(Product::class)->create(['category_id'=>17]);
+        $response = $this->post("api/my/product/{$product->id}");
+        $response->assertOk();
+        $response->assertJsonStructure(['product_company']);
+        $this->assertCount(1, $product->fresh()->company()->get());
+
+        $response = $this->put("api/my/product/{$product->id}/price", ["price"=>0.55]);
+        $response->assertOk();
+        $this->assertCount(1, $product->fresh()->company()->get());
+        $this->assertEquals(0.55, $product->fresh()->company()->get()->first()->pivot->price);
+    }
+
+    public function testRemoveProductPriceInCompany()
+    {
+        $product = factory(Product::class)->create(['category_id'=>17]);
+        $response = $this->post("api/my/product/{$product->id}");
+        $response->assertOk();
+        $response->assertJsonStructure(['product_company']);
+        $this->assertCount(1, $product->fresh()->company()->get());
+
+        $response = $this->put("api/my/product/{$product->id}/price", ["price"=>null]);
+        $response->assertOk();
+        $this->assertCount(1, $product->fresh()->company()->get());
+        $this->assertNull($product->fresh()->company()->get()->first()->pivot->price);
+    }
 }

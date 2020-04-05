@@ -84,6 +84,21 @@ export default {
             })
         })
     },
+    updateCompanyProductPrice({
+        dispatch
+    }, product) {
+        return new Promise((resolve, reject) => {
+            axios.put(`api/my/product/${product.id}/price`, {
+                price: product.price
+            }).then(response => {
+                dispatch('fetchProducts', {
+                    category_id: product.category_id,
+                    limit: product.limit
+                })
+                resolve(response);
+            })
+        })
+    },
     removeProduct({
         commit,
         dispatch
@@ -119,6 +134,22 @@ export default {
                 resolve(response);
             }).catch(err => {
                 reject(err);
+            })
+        })
+    },
+    removePriceProductCompany({
+        commit,
+        dispatch
+    }, product) {
+        return new Promise((resolve, reject) => {
+            axios.put(`api/my/product/${product.id}/price`, {
+                price: null
+            }).then(response => {
+                dispatch('fetchProducts', {
+                    category_id: product.category_id,
+                    limit: product.limit
+                })
+                resolve(response);
             })
         })
     },

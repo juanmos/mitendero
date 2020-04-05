@@ -63,8 +63,10 @@ class Product extends Model
             $query->with([
                 'photos'=> function ($query) {
                     $query->default();
+                },
+                'company'=>function ($query) {
+                    $query->where('company_id', auth()->user()->company_id);
                 }
-                
             ]);
             $query->withCount(['company'=>function ($query) {
                 $query->where('company_id', auth()->user()->company_id);

@@ -63,6 +63,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => 'my'], function () {
         Route::get('product/{product}', 'Company\ProductController@getProductInCompany')->name('my.company.product.getter');
         Route::post('product/{product}', 'Company\ProductController@setProductInCompany')->name('my.company.product.setter');
+        Route::put('product/{product}/price', 'Company\ProductController@updateProductPrice')->name('my.company.product.price');
         Route::delete('product/{product}', 'Company\ProductController@removeProductInCompany')->name('my.company.product.remove');
     });
 });

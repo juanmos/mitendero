@@ -207,6 +207,7 @@ export default {
         productDeletedTitle: 'Producto eliminado',
         productDeletedText: 'El producto ha sido eliminado con exito',
         productAdded: 'Producto agregado',
-        productUpdated: 'Producto actualizado'
+        productUpdated: 'Producto actualizado',
+        priceSuggested: 'Precio sugerido'
     },
 }
