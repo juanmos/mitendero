@@ -79,8 +79,8 @@ import { mapActions, mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
-      email: "juanmos@gmail.com",
-      password: "123456",
+      email: "",
+      password: "",
       checkbox_remember_me: false,
       errorLogin: false
     };

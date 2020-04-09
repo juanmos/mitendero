@@ -5,6 +5,7 @@ Route::post('company/suggestion', 'CompanySuggestionController@store');
 Route::group(['prefix' => 'auth','middleware'=>'api', 'namespace'=>'Auth'], function () {
     Route::post('login', ['as'=>'login','uses'=>'LoginController@login']);
     Route::post('signup/{type}', ['as'=>'signup','uses'=>'RegisterController@register']);
+    Route::get('/companies/types', 'CompanyController@companyTypes')->name('company.types');
 });
 
 Route::group(['prefix' => 'auth','middleware'=>'auth:api', 'namespace'=>'Auth'], function () {
@@ -22,7 +23,7 @@ Route::group(['prefix' => 'profile','middleware'=>'auth:api'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
     //COMPANIES
     Route::get('/companies', 'CompanyController@index')->name('company.index');
-    Route::get('/companies/types', 'CompanyController@companyTypes')->name('company.types');
+    
     Route::post('/company', 'CompanyController@store')->name('company.store');
     Route::put('/company/{company}', 'CompanyController@update')->name('company.update');
     Route::get('company/{company}/users', 'CompanyController@users')->name('company.users');
