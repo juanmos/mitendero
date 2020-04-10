@@ -11,7 +11,7 @@ class VerifyEmail extends VerifyEmailNotification
 {
     protected function verificationUrl($notifiable)
     {
-        return Config::get('app.url').'/email/verify?' . http_build_query(
+        return Config::get('app.url').'email/verify?' . http_build_query(
             [
                 'verifyLink' => URL::temporarySignedRoute(
                     'verification.verify',

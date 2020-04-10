@@ -6,7 +6,6 @@ Route::get('/companies/types', 'CompanyController@companyTypes')->name('company.
 Route::group(['prefix' => 'auth','middleware'=>'api', 'namespace'=>'Auth'], function () {
     Route::post('login', ['as'=>'login','uses'=>'LoginController@login']);
     Route::post('signup/{type}', ['as'=>'signup','uses'=>'RegisterController@register']);
-    
 });
 
 Route::group(['prefix' => 'auth','middleware'=>'auth:api', 'namespace'=>'Auth'], function () {
