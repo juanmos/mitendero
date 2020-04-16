@@ -52,6 +52,7 @@
           <h1>Mi Tendero a domicilio</h1>
           <p>Pide lo q necesites de tu tienda favorita a los precios más convenientes, apoyando a los pequeños negocios!</p>
           <a class="button button-hero mt-4" href="{{url('/login')}}">Iniciar sesión</a>
+          <a class="button button-hero mt-4" href="{{url('/shop')}}">Hacer compras</a>
         </div>
         <div class="col-md-6 col-lg-7 col-xl-6 offset-xl-1">
           <img class="img-fluid" src="{{asset('images/web/home/compra.png')}}" alt="">
