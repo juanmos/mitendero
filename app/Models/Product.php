@@ -59,7 +59,7 @@ class Product extends Model
 
     public function scopeMixins($query)
     {
-        if (in_array('Comercio', auth('api')->user()->getRoleNames()->toArray())) {
+        if (auth('api')->check() && in_array('Comercio', auth('api')->user()->getRoleNames()->toArray())) {
             $query->with([
                 'photos'=> function ($query) {
                     $query->default();
