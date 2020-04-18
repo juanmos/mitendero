@@ -53,7 +53,10 @@ class ProductController extends Controller
         $data=$request->except(['photo','nutritionalFacts']);
         $brand = Brand::find($request->get('brand_id'));
         if ($brand==null) {
-            $brand = Brand::create(['name'=>$request->get('brand_name')]);
+            $brand = Brand::where('name', $request->get('brand_name'))->first();
+            if ($brand==null) {
+                $brand = Brand::create(['name'=>$request->get('brand_name')]);
+            }
         }
         $data['brand_id']=$brand->id;
         $product= $category->products()->create($data);
