@@ -18,6 +18,7 @@ import actions from "./actions"
 
 import auth from "./modules/auth";
 import category from "./modules/category";
+import clientCategory from "./modules/client-category";
 import company from "./modules/company";
 import companies from "./modules/companies";
 import configuration from "./modules/configuration";
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     modules: {
         auth,
         category,
+        clientCategory,
         company,
         companies,
         configuration,

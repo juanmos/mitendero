@@ -352,6 +352,57 @@ const router = new Router({
             ]
         },
         {
+            path: '/shopping-client/:_type',
+            meta: {
+                requiresAuth: false
+            },
+            component: () =>
+                import ('./views/companies/CompanyMain.vue'),
+            children: [{
+                    path: '',
+                    name: 'shop.products',
+                    component: () =>
+                        import ('./views/categories/Categories.vue')
+                },
+                {
+                    path: 'subcategory/:id',
+                    props: true,
+                    name: 'shop.categories.subcategory',
+                    component: () =>
+                        import ('./views/categories/Products.vue')
+                }, {
+                    path: 'subcategory/:id/all',
+                    props: true,
+                    name: 'shop.categories.subcategory.all',
+                    component: () =>
+                        import ('./views/categories/ProductsAll.vue')
+                }
+            ]
+
+        },
+        {
+            path: '/shopping-client1',
+            component: () =>
+                import ('@/layouts/main/Main.vue'),
+            meta: {
+                requiresAuth: false
+            },
+            children: [
+                // =============================================================================
+                // PAGES
+                // =============================================================================
+                {
+                    path: '',
+                    name: 'user.home',
+                    meta: {
+                        rule: 'Usuario'
+                    },
+                    component: () =>
+                        import ('./views/home/User.vue')
+                }
+            ]
+        },
+        {
             path: '/profile',
             component: () =>
                 import ('@/layouts/main/Main.vue'),

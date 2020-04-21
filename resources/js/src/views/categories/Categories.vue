@@ -78,12 +78,14 @@ export default {
   data() {
     return {
       categorySearchQuery: "",
+      viewType: 'admin',
+      categoryList: [],
       kb: []
     };
   },
   computed: {
     filteredCategories() {
-      return this.categories.filter(
+      return this.categoryList.filter(
         item =>
           item.category
             .toLowerCase()
@@ -98,14 +100,29 @@ export default {
     prefix() {
       return this.$store.getters["auth/getPrefix"];
     },
-    ...mapGetters("category", ["categories"])
+    ...mapGetters("category", ["categories"]),
+    ...mapGetters("clientCategory", ["clientCategories"])
   },
   methods: {
-    ...mapActions("category", ["fetchCategories"])
+    ...mapActions("category", ["fetchCategories"]),
+    ...mapActions("clientCategory", ["fetchClientCategories"])
   },
   components: {},
   created() {
-    this.fetchCategories();
+    this.viewType = (this.$route.name === 'shop.products') ? 'client' : 'admin'
+    if (this.viewType === 'admin') {
+      this.fetchCategories();
+    } else {
+      this.fetchClientCategories()
+    }
+  },
+  watch: {
+    clientCategories: function (val) {
+      this.categoryList = val
+    },
+    categories: function (val) {
+      this.categoryList = val
+    }
   }
 };
 </script>
