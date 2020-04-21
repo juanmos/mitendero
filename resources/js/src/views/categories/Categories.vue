@@ -1,5 +1,5 @@
 <!-- =========================================================================================
-    File Name: KnowledgeBase.vueb //
+    File Name: KnowledgeBase.vueb
     Description: Knowledge Base Page
     ----------------------------------------------------------------------------------------
     Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
@@ -61,8 +61,11 @@
               :key="subcategory.id"
               class="py-2 text-left"
             >
-              <router-link
+              <router-link v-if="viewType === 'admin'"
                 :to="{name:prefix+'.categories.subcategory', params:{id:subcategory.category_id}}"
+              >{{ subcategory.category }}</router-link>
+              <router-link v-v-else
+                :to="{name:'shop.categories.subcategory', params:{id:subcategory.category_id}}"
               >{{ subcategory.category }}</router-link>
             </li>
           </ul>

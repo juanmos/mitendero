@@ -378,7 +378,6 @@ const router = new Router({
                         import ('./views/categories/ProductsAll.vue')
                 }
             ]
-
         },
         {
             path: '/shopping-client1',

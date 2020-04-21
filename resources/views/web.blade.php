@@ -26,8 +26,8 @@
 
           <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
             <ul class="nav navbar-nav menu_nav justify-content-end">
-              <li class="nav-item active"><a class="nav-link" href="index.html">Inicio</a></li> 
-              <li class="nav-item"><a class="nav-link" href="about.html">Tiendas</a></li> 
+              <li class="nav-item active"><a class="nav-link" href="index.html">Inicio</a></li>
+              <li class="nav-item"><a class="nav-link" href="about.html">Tiendas</a></li>
               <li class="nav-item"><a class="nav-link" href="package.html">Sobre nosotros</a></li>
               <li class="nav-item"><a class="nav-link" href="{{url('/login')}}">Iniciar sesión</a></li>
             </ul>
@@ -35,7 +35,7 @@
             <div class="nav-right text-center text-lg-right py-4 py-lg-0">
               <a class="button" href="{{url('/tienda/nueva')}}">Registra tu tienda</a>
             </div>
-          </div> 
+          </div>
         </div>
       </nav>
     </div>
@@ -52,7 +52,7 @@
           <h1>Mi Tendero a domicilio</h1>
           <p>Pide lo q necesites de tu tienda favorita a los precios más convenientes, apoyando a los pequeños negocios!</p>
           <a class="button button-hero mt-4" href="{{url('/login')}}">Iniciar sesión</a>
-          <a class="button button-hero mt-4" href="{{url('/shop')}}">Hacer compras</a>
+          <a class="button button-hero mt-4" href="{{url('/shopping-client/client=true')}}">Hacer compras</a>
         </div>
         <div class="col-md-6 col-lg-7 col-xl-6 offset-xl-1">
           <img class="img-fluid" src="{{asset('images/web/home/compra.png')}}" alt="">
@@ -98,10 +98,10 @@
         <div class="col-md-6 col-lg-6 mb-4 mb-lg-0">
           <div class="service-card text-center">
             <div class="service-card-img">
-              
+
               <img class="img-fluid" src="{{asset('images/web/home/service2.png')}}" alt="">
             </div>
-          </div> 
+          </div>
         </div>
         {{-- tiendas fin --}}
         <div class="col-md-6 col-lg-6 mb-4 mb-lg-0">
@@ -128,7 +128,7 @@
             <div class="service-card-img">
               <img class="img-fluid" src="{{asset('images/web/home/service4.png')}}" alt="">
             </div>
-            
+
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@
                   </div>
                 </div> --}}
               </div>
-            </div>  
+            </div>
             <div class="col-md-6 col-sm-6 col-6">
               <div class="category-card">
                 <img class="card-img rounded-0" src="{{asset('images/web/categories/bread.svg')}}" alt="">
@@ -194,7 +194,7 @@
               </div>
             </div>
           </div>
-        </div>  
+        </div>
         <div class="col-md-12 col-sm-12">
           <div class="row">
             <div class="col-md-3 col-sm-6 col-6">
@@ -275,7 +275,7 @@
           </div>
         </div>
       </div>
-      
+
       {{-- <div class="row">
         <div class="col-md-6 col-lg-7">
           <div class="tour-card">
@@ -545,22 +545,22 @@
                   <li><a href="#">Blog</a></li>
                   <li><a href="#">Contact</a></li>
                 </ul>
-              </div>										
-            </div>							
+              </div>
+            </div>
           </div>
-        </div>							
+        </div>
         <div class="col-lg-3  col-md-6 col-sm-6">
           <div class="single-footer-widget">
             <h6>Boletin</h6>
             <p>
-              For business professionals caught between high OEM price and mediocre print and graphic output.									
-            </p>								
+              For business professionals caught between high OEM price and mediocre print and graphic output.
+            </p>
             <div id="mc_embed_signup">
               <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" class="subscription relative">
                 <div class="input-group d-flex flex-row">
                   <input name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address '" required="" type="email">
-                  <button class="btn bb-btn"><span class="lnr lnr-location"></span></button>		
-                </div>									
+                  <button class="btn bb-btn"><span class="lnr lnr-location"></span></button>
+                </div>
                 <div class="mt-10 info"></div>
               </form>
             </div>
@@ -580,7 +580,7 @@
               <li><img src="images/web/instagram/i8.jpg" alt=""></li>
             </ul>
           </div>
-        </div>						
+        </div>
       </div>
 
       <div class="footer-bottom">
@@ -603,7 +603,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 
-  
+
   <script src="{{asset('js/web.min.js')}}"></script>
 </body>
 </html>
