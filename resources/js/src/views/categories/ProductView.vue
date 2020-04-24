@@ -2,7 +2,10 @@
   <div class="vx-col md:w-1/6 lg:w-1/6 product-view" :class="{'no-sale' : noSale}">
     <div class="product-data">
       <img class="grid-view-img px-4 imgProduct" :src="productImage" />
-      <h4 class="priceProduct">$ {{price}}</h4>
+      <center>
+        <h4 class="priceProduct">$ {{price}}</h4>
+      </center>
+      <vs-input-number min="1" max="10" v-model="quantity" class="inline-flex quantityProduct" />
       <h5 class="nameProduct">{{product.name}}</h5>
       <p class="descriptionProduct">{{product.description}}</p>
       <small class="presentationProduct">{{product.presentation}}</small>
@@ -40,6 +43,7 @@ export default {
   data() {
     return {
       productImage: "",
+      quantity: 1,
       rol: this.$store.getters["auth/getRol"]
     };
   },
@@ -216,6 +220,10 @@ h4 {
    font-size: 9px !important;
  }
  .priceProduct {
+   margin-bottom: 5px;
+   text-align: center;
+ }
+ .quantityProduct {
    margin-bottom: 15px;
  }
 </style>
