@@ -1,11 +1,11 @@
 <template>
   <div class="vx-col md:w-1/6 lg:w-1/6 product-view" :class="{'no-sale' : noSale}">
     <div class="product-data">
-      <img class="grid-view-img px-4" :src="productImage" />
-      <h4>$ {{price}}</h4>
-      <h5>{{product.name}}</h5>
-      <p>{{product.description}}</p>
-      <small>{{product.presentation}}</small>
+      <img class="grid-view-img px-4 imgProduct" :src="productImage" />
+      <h4 class="priceProduct">$ {{price}}</h4>
+      <h5 class="nameProduct">{{product.name}}</h5>
+      <p class="descriptionProduct">{{product.description}}</p>
+      <small class="presentationProduct">{{product.presentation}}</small>
     </div>
     <div class="demo-alignment product-view-buttons" v-if="!noSale">
       <vs-button
@@ -196,4 +196,26 @@ h4 {
 .pull-right {
   float: right;
 }
+.imgProduct {
+  max-width: 128px;
+  max-height: 120px;
+  min-width: 128px;
+  min-height: 120px;
+  margin-bottom: 25px;
+}
+
+.nameProduct {
+  font-size: 11.96px !important;
+  margin-bottom: 5px;
+}
+ .descriptionProduct {
+   font-size: 10px !important;
+   text-align: justify;
+ }
+ .presentationProduct {
+   font-size: 9px !important;
+ }
+ .priceProduct {
+   margin-bottom: 15px;
+ }
 </style>

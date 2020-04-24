@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="vx-row" v-if="products">
-      <product-view
+      <product-view class="product"
         v-for="product in products.data"
         :key="product.id"
         :product="product"
@@ -63,4 +63,8 @@ export default {
 </script>
 
 <style>
+.product {
+  /*max-width: 128px;
+  max-height: 100px; */
+}
 </style>
