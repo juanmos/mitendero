@@ -360,6 +360,7 @@ const router = new Router({
                 import ('./views/companies/CompanyMain.vue'),
             children: [{
                     path: '',
+                    props: true,
                     name: 'shop.products',
                     component: () =>
                         import ('./views/categories/Categories.vue')
