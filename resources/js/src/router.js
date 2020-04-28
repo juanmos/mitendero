@@ -381,26 +381,13 @@ const router = new Router({
             ]
         },
         {
-            path: '/shopping-client1',
+            path: '/shopping-list',
             component: () =>
-                import ('@/layouts/main/Main.vue'),
+                import ('./views/shopping-car/ListShoppingCar.vue'),
             meta: {
                 requiresAuth: false
             },
-            children: [
-                // =============================================================================
-                // PAGES
-                // =============================================================================
-                {
-                    path: '',
-                    name: 'user.home',
-                    meta: {
-                        rule: 'Usuario'
-                    },
-                    component: () =>
-                        import ('./views/home/User.vue')
-                }
-            ]
+            children: []
         },
         {
             path: '/profile',

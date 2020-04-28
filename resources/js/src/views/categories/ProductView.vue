@@ -214,7 +214,7 @@ export default {
         ? this.product.photos[0].photo
         : "http://tiendaweb.test/images/web/categories/soda.svg";
     this.viewType = (this.$route.params._type === 'client=true') ? 'client' : 'admin'
-    this.currentProduct = {...this.product, addToCar: false}
+    this.currentProduct = {...this.product, addToCar: false, productImage: this.productImage}
   }
 };
 </script>

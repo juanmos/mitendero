@@ -20,7 +20,7 @@ import auth from "./modules/auth";
 import category from "./modules/category";
 import clientCategory from "./modules/client-category";
 // import shoppingCart from "./modules/shopping-cart";
-import shoppingCart from "./modules/shopping-cart/shoppingCart";
+import shoppingCar from "./modules/shopping-car/shoppingCar";
 import company from "./modules/company";
 import companies from "./modules/companies";
 import configuration from "./modules/configuration";
@@ -40,7 +40,7 @@ export default new Vuex.Store({
         auth,
         category,
         clientCategory,
-        shoppingCart,
+        shoppingCar,
         company,
         companies,
         configuration,

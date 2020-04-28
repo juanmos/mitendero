@@ -1,6 +1,6 @@
 <template>
   <vx-card :title="subcategory.category" :subtitle="available + ' items disponibles'">
-    <div slot="actions">
+    <div slot="actions" v-if="viewType === 'admin'">
       <div class="vx-card__action-buttons">
         <vs-button
           radius
@@ -37,6 +37,12 @@ import { mapActions, mapGetters } from "vuex";
 import ProductView from "./ProductView.vue";
 export default {
   props: ["subcategory", "openSidebar", "editData"],
+  data() {
+    return {
+      viewType: 'client',
+      rol: this.$store.getters["auth/getRol"]
+    };
+  },
   methods: {
     ...mapActions("products", ["fetchProducts"]),
     openAll(subcategory) {
@@ -57,6 +63,9 @@ export default {
   },
   beforeMount() {
     this.fetchProducts({ category_id: this.subcategory.id, limit: 6 });
+  },
+  created () {
+    this.viewType = (this.$route.params._type === 'client=true') ? 'client' : 'admin'
   },
   components: { ProductView }
 };

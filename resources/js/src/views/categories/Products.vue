@@ -43,6 +43,18 @@
         </vx-card>
       </div>
       <div class="vx-col w-full md:w-3/5 lg:w-3/4">
+        <div slot="actions" v-if="viewType === 'client'" style="margin-bottom: 15px;">
+          <div class="vx-card__action-buttons">
+            <vs-button
+              size="small"
+              color="orange"
+              type="filled"
+              icon-pack="feather"
+              icon="icon-plus"
+              @click="goToShoppingCar()"
+            >IR AL CARRITO</vs-button>
+          </div>
+        </div>
         <product-list
           v-for="subcategory in category.subcategory"
           :key="subcategory.id"
@@ -65,6 +77,7 @@ export default {
     return {
       productSearchQuery: "",
       // Data Sidebar
+      viewType: 'client',
       addNewDataSidebar: false,
       sidebarData: {}
     };
@@ -94,10 +107,14 @@ export default {
     },
     handleBack(fallback) {
       this.$router.back();
+    },
+    goToShoppingCar () {
+      this.$router.push(`/shopping-list`)
     }
   },
   created() {
     this.fetchCategory(this.id);
+    this.viewType = (this.$route.params._type === 'client=true') ? 'client' : 'admin'
   },
   components: { ProductList, ProductSidebar }
 };
