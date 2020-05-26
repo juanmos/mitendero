@@ -128,7 +128,6 @@
             <div class="service-card-img">
               <img class="img-fluid" src="{{asset('images/web/home/service4.png')}}" alt="">
             </div>
-
           </div>
         </div>
       </div>
@@ -275,7 +274,6 @@
           </div>
         </div>
       </div>
-
       {{-- <div class="row">
         <div class="col-md-6 col-lg-7">
           <div class="tour-card">

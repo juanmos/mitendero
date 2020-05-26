@@ -1,5 +1,5 @@
 <!-- =========================================================================================
-    File Name: KnowledgeBase.vueb
+    File Name: KnowledgeBase.vue
     Description: Knowledge Base Page
     ----------------------------------------------------------------------------------------
     Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
