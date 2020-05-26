@@ -352,6 +352,44 @@ const router = new Router({
             ]
         },
         {
+            path: '/shopping-client/:_type',
+            meta: {
+                requiresAuth: false
+            },
+            component: () =>
+                import ('./views/companies/CompanyMain.vue'),
+            children: [{
+                    path: '',
+                    props: true,
+                    name: 'shop.products',
+                    component: () =>
+                        import ('./views/categories/Categories.vue')
+                },
+                {
+                    path: 'subcategory/:id',
+                    props: true,
+                    name: 'shop.categories.subcategory',
+                    component: () =>
+                        import ('./views/categories/Products.vue')
+                }, {
+                    path: 'subcategory/:id/all',
+                    props: true,
+                    name: 'shop.categories.subcategory.all',
+                    component: () =>
+                        import ('./views/categories/ProductsAll.vue')
+                }
+            ]
+        },
+        {
+            path: '/shopping-list',
+            component: () =>
+                import ('./views/shopping-car/ListShoppingCar.vue'),
+            meta: {
+                requiresAuth: false
+            },
+            children: []
+        },
+        {
             path: '/profile',
             component: () =>
                 import ('@/layouts/main/Main.vue'),

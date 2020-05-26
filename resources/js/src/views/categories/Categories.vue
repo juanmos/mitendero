@@ -61,8 +61,11 @@
               :key="subcategory.id"
               class="py-2 text-left"
             >
-              <router-link
+              <router-link v-if="viewType === 'admin'"
                 :to="{name:prefix+'.categories.subcategory', params:{id:subcategory.category_id}}"
+              >{{ subcategory.category }}</router-link>
+              <router-link v-v-else
+                :to="{name:'shop.categories.subcategory', params:{id:subcategory.category_id}}"
               >{{ subcategory.category }}</router-link>
             </li>
           </ul>
@@ -78,12 +81,14 @@ export default {
   data() {
     return {
       categorySearchQuery: "",
+      viewType: 'admin',
+      categoryList: [],
       kb: []
     };
   },
   computed: {
     filteredCategories() {
-      return this.categories.filter(
+      return this.categoryList.filter(
         item =>
           item.category
             .toLowerCase()
@@ -98,14 +103,29 @@ export default {
     prefix() {
       return this.$store.getters["auth/getPrefix"];
     },
-    ...mapGetters("category", ["categories"])
+    ...mapGetters("category", ["categories"]),
+    ...mapGetters("clientCategory", ["clientCategories"])
   },
   methods: {
-    ...mapActions("category", ["fetchCategories"])
+    ...mapActions("category", ["fetchCategories"]),
+    ...mapActions("clientCategory", ["fetchClientCategories"])
   },
   components: {},
   created() {
-    this.fetchCategories();
+    this.viewType = (this.$route.name === 'shop.products') ? 'client' : 'admin'
+    if (this.viewType === 'admin') {
+      this.fetchCategories();
+    } else {
+      this.fetchClientCategories()
+    }
+  },
+  watch: {
+    clientCategories: function (val) {
+      this.categoryList = val
+    },
+    categories: function (val) {
+      this.categoryList = val
+    }
   }
 };
 </script>

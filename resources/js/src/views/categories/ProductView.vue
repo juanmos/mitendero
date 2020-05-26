@@ -1,11 +1,19 @@
 <template>
-  <div class="vx-col md:w-1/6 lg:w-1/6 product-view" :class="{'no-sale' : noSale}">
+  <!-- <div class="vx-col md:w-1/6 lg:w-1/6 product-view" :class="{'no-sale' : noSale}"> -->
+  <div class="vx-col md:w-1/6 lg:w-1/6 product-view">
     <div class="product-data">
-      <img class="grid-view-img px-4" :src="productImage" />
-      <h4>$ {{price}}</h4>
-      <h5>{{product.name}}</h5>
-      <p>{{product.description}}</p>
-      <small>{{product.presentation}}</small>
+      <img class="grid-view-img px-4 imgProduct" :src="productImage" />
+      <center>
+        <h4 class="priceProduct">$ {{price}}</h4>
+      </center>
+      <center v-if="noSale">
+        <vs-button color="primary" size="small" type="filled" icon="add" @click="addProductShoppingCart()" v-if="!currentProduct.addToCar">Agregar</vs-button>
+        <vs-button v-else color="danger" size="small" type="filled" icon="add" @click="deleteProductShoppingCart()">Quitar</vs-button>
+        <vs-input-number min="1" max="10" v-model="quantity" class="inline-flex quantityProduct" />
+      </center>
+      <h5 class="nameProduct">{{product.name}}</h5>
+      <p class="descriptionProduct">{{product.description}}</p>
+      <small class="presentationProduct">{{product.presentation}}</small>
     </div>
     <div class="demo-alignment product-view-buttons" v-if="!noSale">
       <vs-button
@@ -35,11 +43,16 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex'
 export default {
   props: ["product", "editData", "limit"],
   data() {
     return {
       productImage: "",
+      viewType: '',
+      quantity: 1,
+      productAdd: false,
+      currentProduct: null,
       rol: this.$store.getters["auth/getRol"]
     };
   },
@@ -52,6 +65,12 @@ export default {
         if (this.product.company_count > 0) {
           return false;
         }
+        return true;
+      }
+      if (this.viewType == "client") {
+        /* if (this.product.company_count > 0) {
+          return false;
+        } */
         return true;
       }
     },
@@ -72,11 +91,37 @@ export default {
   },
   watch: {
     price: function(value) {
-      console.log("price", value);
       this.product.priceSuggested = value;
+    },
+    quantity: function(value) {
+      let productsSelected = [...this.getProductsArray()]
+      this.upadateQuantity(productsSelected, value)
     }
   },
   methods: {
+    ...mapActions([
+      'setProductsArray'
+    ]),
+    ...mapGetters([
+      'getProductsArray'
+    ]),
+    upadateQuantity (list, value) {
+      list = list.map(productCart => {
+        if (productCart.id === this.currentProduct.id) {
+          this.currentProduct.quantity = value
+          productCart = {...this.currentProduct}
+        }
+        return productCart
+      })
+      this.setProductsArray([...list])
+      console.log('agregando---', this.getProductsArray());
+    },
+    deleteProductListCart () {
+      this.currentProduct.addToCar = false
+      let newArray = this.getProductsArray().filter(productInCar => productInCar.id !== this.currentProduct.id)
+      this.setProductsArray([...newArray])
+      console.log('agregando---', this.getProductsArray());
+    },
     deleteProduct() {
       this.$vs.dialog({
         type: "confirm",
@@ -84,6 +129,16 @@ export default {
         title: this.$t("confirmDeleteTitle"),
         text: this.$t("confirmDeleteProductText"),
         accept: this.acceptAlert,
+        acceptText: this.$t("delete")
+      });
+    },
+    deleteProductShoppingCart() {
+      this.$vs.dialog({
+        type: "confirm",
+        color: "danger",
+        title: "Eliminar del carrito de compras",
+        text: 'Va a eliminar el producto del carrito de compras. Quiere continuar ?',
+        accept: this.deleteProductListCart,
         acceptText: this.$t("delete")
       });
     },
@@ -116,12 +171,27 @@ export default {
           });
       }
     },
-    editProduct() {
+    editProductS() {
       if (this.rol == "SuperAdministrador") {
         this.editData(this.product);
       } else {
         this.editData(this.product);
       }
+    },
+    addProduct() {
+      if (this.rol == "SuperAdministrador") {
+        this.editData(this.product);
+      } else {
+        this.editData(this.product);
+      }
+    },
+    addProductShoppingCart() {
+      this.currentProduct.addToCar = true
+      let productToCart = {...this.currentProduct, quantity: this.quantity}
+      this.setProductsArray([...this.getProductsArray(), productToCart])
+      console.log('agregando---', this.getProductsArray());
+      // console.log('this.cambiando store---',this.$store.getProductsArray);
+      // console.log('array---', this.productsArray);
     },
     addProductToCompany() {
       console.log("click");
@@ -143,6 +213,8 @@ export default {
       this.product.photos.length > 0
         ? this.product.photos[0].photo
         : "http://tiendaweb.test/images/web/categories/soda.svg";
+    this.viewType = (this.$route.params._type === 'client=true') ? 'client' : 'admin'
+    this.currentProduct = {...this.product, addToCar: false, productImage: this.productImage}
   }
 };
 </script>
@@ -196,4 +268,30 @@ h4 {
 .pull-right {
   float: right;
 }
+.imgProduct {
+  max-width: 128px;
+  max-height: 120px;
+  min-width: 128px;
+  min-height: 120px;
+  margin-bottom: 25px;
+}
+
+.nameProduct {
+  font-size: 11.96px !important;
+  margin-bottom: 5px;
+}
+ .descriptionProduct {
+   font-size: 10px !important;
+   text-align: justify;
+ }
+ .presentationProduct {
+   font-size: 9px !important;
+ }
+ .priceProduct {
+   margin-bottom: 5px;
+   text-align: center;
+ }
+ .quantityProduct {
+   margin-bottom: 15px;
+ }
 </style>
