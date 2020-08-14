@@ -11,7 +11,6 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\VerifyEmail;
-use App\Models\Company;
 
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
@@ -32,14 +31,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-    ];
-
-    protected $with =['company'];
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'company_id');
-    }
+    ];    
 
     public function getFullNameAttribute()
     {
